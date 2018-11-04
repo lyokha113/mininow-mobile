@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Mini Now</string>
+    <string name="nav_store">CỬA HÀNG</string>
+    <string name="nav_order">ĐƠN HÀNG</string>
+    <string name="nav_account">TÀI KHOẢN</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

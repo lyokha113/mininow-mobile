@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="100"
+    tools:context=".StoreFragment">
+
+    <ss.com.bannerslider.Slider
+        android:id="@+id/store_banner"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="35"
+        app:slider_defaultBanner="1"
+        app:slider_indicatorSize="10dp"
+        app:slider_interval="3000"
+        app:slider_loopSlides="true" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/accountviewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="65"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabBackground="@drawable/store_border_tabs"
+            app:tabIndicatorColor="@color/colortTransparent"
+            app:tabInlineLabel="true"
+            app:tabSelectedTextColor="#fa5d5d"
+            app:tabTextColor="#BDBDBD" />
+
+    </androidx.viewpager.widget.ViewPager>
+
+</LinearLayout>

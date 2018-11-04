@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_store"
+        android:enabled="true"
+        app:labelVisibilityMode="unlabeled"
+        android:icon="@drawable/nav_store"
+        android:title="@string/nav_store" />
+
+    <item
+        android:id="@+id/nav_order"
+        android:enabled="true"
+        app:labelVisibilityMode="unlabeled"
+        android:icon="@drawable/nav_order"
+        android:title="@string/nav_order" />
+
+    <item
+        android:id="@+id/nav_account"
+        android:enabled="true"
+        app:labelVisibilityMode="unlabeled"
+        android:icon="@drawable/nav_account"
+        android:title="@string/nav_account" />
+</menu>
