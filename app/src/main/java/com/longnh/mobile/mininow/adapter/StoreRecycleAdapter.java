@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.longnh.mobile.mininow.ProductActivity;
 import com.longnh.mobile.mininow.R;
 import com.longnh.mobile.mininow.entity.Store;
-import com.longnh.mobile.mininow.state.ConstantManager;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;

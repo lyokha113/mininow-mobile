@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
 import com.longnh.mobile.mininow.adapter.StoreRecycleAdapter;
 import com.longnh.mobile.mininow.entity.Store;
 import com.longnh.mobile.mininow.model.StoreService;
@@ -50,27 +51,28 @@ public class NewStoreFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if (stores != null) {
-            Toast.makeText(getActivity(), "Store not null", Toast.LENGTH_SHORT).show();
-        } else {
-            spinner.setVisibility(View.VISIBLE);
+        if (stores == null) {
             getStores();
+        } else {
+            setStoreList();
         }
-
 
     }
 
-    private void getStores() {
+    private void setStoreList() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        listStores.setLayoutManager(layoutManager);
+        listStores.setHasFixedSize(true);
+        listStores.setAdapter(adapter);
+        spinner.setVisibility(View.GONE);
+    }
 
+    private void getStores() {
+        spinner.setVisibility(View.VISIBLE);
         StoreService.getNewStores(data -> {
             stores = (List<Store>) data;
             adapter = new StoreRecycleAdapter(getActivity(), stores);
-
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
-            listStores.setLayoutManager(layoutManager);
-            listStores.setHasFixedSize(true);
-            listStores.setAdapter(adapter);
-            spinner.setVisibility(View.GONE);
+            setStoreList();
         });
     }
 

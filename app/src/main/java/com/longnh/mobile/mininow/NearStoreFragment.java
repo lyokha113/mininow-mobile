@@ -54,6 +54,7 @@ public class NearStoreFragment extends Fragment {
         public void onProviderDisabled(String provider) {
         }
     };
+
     List<Store> result;
     private ProgressBar spinner;
     private StoreRecycleAdapter adapter;

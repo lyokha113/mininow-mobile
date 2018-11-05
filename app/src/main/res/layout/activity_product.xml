@@ -19,6 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#80E0E0E0"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:orientation="vertical">
 
             <TextView
@@ -36,9 +38,26 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textColor="#FFFFFF"
-                android:text="143 Tôn Đản"/>
+                android:text="143 Tôn Đản - 0904665244"/>
 
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="75"
+        android:background="@drawable/products_border"
+        android:padding="8dp">
+
+            <GridView
+                android:id="@+id/products"
+                android:numColumns="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                >
+
+            </GridView>
+    </LinearLayout>
 </LinearLayout>

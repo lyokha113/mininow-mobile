@@ -11,65 +11,16 @@ import java.io.Serializable;
 
 public class Store implements Serializable {
 
-    @SerializedName("id")
-    @Expose
     private String id;
-
-    @SerializedName("name")
-    @Expose
     private String name;
-
-    @SerializedName("address")
-    @Expose
     private String address;
-
-    @SerializedName("phone")
-    @Expose
     private String phone;
-
-    @SerializedName("email")
-    @Expose
     private String email;
-
-    @SerializedName("description")
-    @Expose
     private String description;
-
-    @SerializedName("imgUrl")
-    @Expose
     private String imgUrl;
-
-    @SerializedName("registerTime")
-    @Expose
     private Timestamp registerTime;
-
-    @SerializedName("location")
-    @Expose
     private GeoPoint location;
-
-    @SerializedName("distance")
-    @Expose
     private String distance;
-
-    public Store(String id, String name, String address, String phone, String email, String description, String imgUrl, Timestamp registerTime, GeoPoint location, String distance) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.phone = phone;
-        this.email = email;
-        this.description = description;
-        this.imgUrl = imgUrl;
-        this.registerTime = registerTime;
-        this.location = location;
-        this.distance = distance;
-    }
-
-    public Store() {
-    }
-
-    ;
-
-
     public String getId() {
         return id;
     }
@@ -141,8 +92,6 @@ public class Store implements Serializable {
 
     public void setDistance(String distance) {
         this.distance = distance;
-
-
     }
 
     public GeoPoint getLocation() {

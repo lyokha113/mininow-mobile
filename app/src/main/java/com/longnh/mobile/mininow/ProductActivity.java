@@ -1,12 +1,9 @@
 package com.longnh.mobile.mininow;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Toast;
-
-import com.longnh.mobile.mininow.state.ConstantManager;
 
 public class ProductActivity extends AppCompatActivity {
 
