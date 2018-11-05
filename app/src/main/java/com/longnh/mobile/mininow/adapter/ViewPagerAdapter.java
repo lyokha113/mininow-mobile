@@ -1,4 +1,4 @@
-package com.longnh.mobile.mininow;
+package com.longnh.mobile.mininow.adapter;
 
 import java.util.ArrayList;
 import java.util.List;

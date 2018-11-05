@@ -1,23 +1,74 @@
 package com.longnh.mobile.mininow.entity;
 
+import android.os.Parcel;
+
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class Store implements Serializable {
 
+    @SerializedName("id")
+    @Expose
     private String id;
+
+    @SerializedName("name")
+    @Expose
     private String name;
+
+    @SerializedName("address")
+    @Expose
     private String address;
+
+    @SerializedName("phone")
+    @Expose
     private String phone;
+
+    @SerializedName("email")
+    @Expose
     private String email;
+
+    @SerializedName("description")
+    @Expose
     private String description;
-    private String img;
+
+    @SerializedName("imgUrl")
+    @Expose
+    private String imgUrl;
+
+    @SerializedName("registerTime")
+    @Expose
     private Timestamp registerTime;
-    private String openTime;
-    private String closeTime;
+
+    @SerializedName("location")
+    @Expose
+    private GeoPoint location;
+
+    @SerializedName("distance")
+    @Expose
+    private String distance;
+
+    public Store(String id, String name, String address, String phone, String email, String description, String imgUrl, Timestamp registerTime, GeoPoint location, String distance) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.description = description;
+        this.imgUrl = imgUrl;
+        this.registerTime = registerTime;
+        this.location = location;
+        this.distance = distance;
+    }
+
+    public Store() {
+    }
+
+    ;
+
 
     public String getId() {
         return id;
@@ -67,12 +118,12 @@ public class Store implements Serializable {
         this.description = description;
     }
 
-    public String getImg() {
-        return img;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public Timestamp getRegisterTime() {
@@ -83,19 +134,23 @@ public class Store implements Serializable {
         this.registerTime = registerTime;
     }
 
-    public String getOpenTime() {
-        return openTime;
+
+    public String getDistance() {
+        return distance;
     }
 
-    public void setOpenTime(String openTime) {
-        this.openTime = openTime;
+    public void setDistance(String distance) {
+        this.distance = distance;
+
+
     }
 
-    public String getCloseTime() {
-        return closeTime;
+    public GeoPoint getLocation() {
+        return location;
     }
 
-    public void setCloseTime(String closeTime) {
-        this.closeTime = closeTime;
+    public void setLocation(GeoPoint location) {
+        this.location = location;
     }
+
 }

@@ -1,4 +1,6 @@
-package com.longnh.mobile.mininow;
+package com.longnh.mobile.mininow.adapter;
+
+import com.longnh.mobile.mininow.R;
 
 import ss.com.bannerslider.adapters.SliderAdapter;
 import ss.com.bannerslider.viewholder.ImageSlideViewHolder;

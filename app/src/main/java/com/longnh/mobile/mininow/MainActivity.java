@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.longnh.mobile.mininow.adapter.ViewPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,24 +39,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void addEvents() {
         bottomNavigation.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        setBottomNavigationSelectedItem(item);
-                        switch (item.getItemId()) {
-                            case R.id.nav_store:
-                                viewPager.setCurrentItem(0);
-                                break;
-                            case R.id.nav_order:
-                                viewPager.setCurrentItem(1);
-                                break;
-                            case R.id.nav_account:
-                                viewPager.setCurrentItem(2);
-                                break;
-                        }
-                        return true;
+                item -> {
+                    setBottomNavigationSelectedItem(item);
+                    switch (item.getItemId()) {
+                        case R.id.nav_store:
+                            viewPager.setCurrentItem(0);
+                            break;
+                        case R.id.nav_order:
+                            viewPager.setCurrentItem(1);
+                            break;
+                        case R.id.nav_account:
+                            viewPager.setCurrentItem(2);
+                            break;
                     }
+                    return true;
                 });
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

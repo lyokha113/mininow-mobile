@@ -3,18 +3,23 @@ package com.longnh.mobile.mininow;
 
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-import ss.com.bannerslider.ImageLoadingService;
-import ss.com.bannerslider.Slider;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
+import com.longnh.mobile.mininow.adapter.StoreSliderAdapter;
+import com.longnh.mobile.mininow.adapter.ViewPagerAdapter;
+import com.longnh.mobile.mininow.state.StateManager;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+import ss.com.bannerslider.ImageLoadingService;
+import ss.com.bannerslider.Slider;
 
 
 /**
@@ -22,6 +27,7 @@ import com.google.android.material.tabs.TabLayout;
  */
 public class StoreFragment extends Fragment {
 
+    private final static String SELECTED_KEY = "SELECTED_INDEX";
     Slider slider;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -68,6 +74,8 @@ public class StoreFragment extends Fragment {
 
         tabLayout = getActivity().findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+
+//        tabLayout.getTabAt(StateManager.STORE_TAB_SELECTED).select();
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -76,5 +84,16 @@ public class StoreFragment extends Fragment {
         adapter.addFrag(new NewStoreFragment(), "Mới");
         adapter.addFrag(new NearStoreFragment(), "Gần Tôi");
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        StateManager.STORE_TAB_SELECTED = tabLayout.getSelectedTabPosition();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 }

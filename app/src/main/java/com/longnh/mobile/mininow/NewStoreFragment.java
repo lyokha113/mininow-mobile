@@ -1,17 +1,30 @@
 package com.longnh.mobile.mininow;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.longnh.mobile.mininow.adapter.StoreRecycleAdapter;
+import com.longnh.mobile.mininow.entity.Store;
+import com.longnh.mobile.mininow.model.StoreService;
+
+import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class NewStoreFragment extends Fragment {
+
+    private StoreRecycleAdapter adapter;
+    private RecyclerView listStores;
+    private ProgressBar spinner;
+    private List<Store> stores;
 
     public NewStoreFragment() {
         // Required empty public constructor
@@ -24,4 +37,50 @@ public class NewStoreFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_new_store, container, false);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        listStores = getActivity().findViewById(R.id.new_stores);
+        spinner = getActivity().findViewById(R.id.progress_bar_new_store);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (stores != null) {
+            Toast.makeText(getActivity(), "Store not null", Toast.LENGTH_SHORT).show();
+        } else {
+            spinner.setVisibility(View.VISIBLE);
+            getStores();
+        }
+
+
+    }
+
+    private void getStores() {
+
+        StoreService.getNewStores(data -> {
+            stores = (List<Store>) data;
+            adapter = new StoreRecycleAdapter(getActivity(), stores);
+
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+            listStores.setLayoutManager(layoutManager);
+            listStores.setHasFixedSize(true);
+            listStores.setAdapter(adapter);
+            spinner.setVisibility(View.GONE);
+        });
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
 }
