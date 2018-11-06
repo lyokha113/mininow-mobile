@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/allOut"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:weightSum="100"
+    tools:context=".ProductActivity">
+
+    <LinearLayout
+        android:id="@+id/allIn"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="82"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:background="@color/colorRed"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:alpha="0.9"
+                android:gravity="center"
+                android:text="Thêm món"
+                android:textColor="@color/colorWhite"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/closePopup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/close_icon" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="85"
+            android:orientation="vertical"
+            android:weightSum="100">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="21"
+                android:background="@color/colorGrayLight"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="28" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="70"
+                    android:orientation="vertical"
+                    android:paddingLeft="14dp"
+                    android:paddingTop="16dp"
+                    android:paddingRight="5dp"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.7"
+                        android:text="XXX XXX XX"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.7"
+                        android:alpha="0.7"
+                        android:text="0 đ"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16sp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1.6"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:id="@+id/btnAdd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/add_circle_green_icon" />
+
+                        <TextView
+                            android:id="@+id/viewSL"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@+id/btnAdd"
+                            android:background="@drawable/rectangle_border_black"
+                            android:gravity="center"
+                            android:text="0"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <ImageButton
+                            android:id="@+id/btnSub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@+id/viewSL"
+                            android:background="@drawable/remove_circle_red_icon" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="15"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingTop="3dp"
+                android:paddingRight="10dp"
+                android:weightSum="100"
+                android:background="@color/colorWhite">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="35dp"
+                    android:layout_weight="8"
+                    android:background="@drawable/edit" />
+
+                <EditText
+                    android:id="@+id/editText"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="92"
+                    android:backgroundTint="@color/colorWhite"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="left|top"
+                    android:hint="Thêm ghi chú"
+                    android:inputType="textMultiLine"
+                    android:maxLines="2"
+                    android:paddingLeft="6dp"
+                    android:textSize="18sp" />
+            </LinearLayout>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="64"
+                android:background="@color/colorWhite">
+                <LinearLayout
+                    android:id="@+id/orderMoreDrink"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:weightSum="100"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:background="@color/colorGrayLight"
+                    android:visibility="visible">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Chọn size"
+                            android:textSize="18sp"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:layout_alignParentLeft="true"
+                            />
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingLeft="5dp"
+                            android:textColor="@color/colorWhite"
+                            android:layout_centerVertical="true"
+                            android:text="BẮT BUỘC"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/rectangle_over_border_gray_dark"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="78dp"
+                        android:paddingLeft="7dp"
+                        android:paddingRight="18dp"
+                        android:background="@color/colorWhite">
+                        <RadioGroup
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/group_Size"
+                            android:weightSum="2"
+                            android:layout_alignParentLeft="true">
+
+                            <RadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="Ly Size M"
+                                android:textSize="18sp"
+                                android:textColor="@color/colorBlack"
+                                android:id="@+id/size_M"
+                                android:checked="true" />
+
+                            <RadioButton
+                                android:textColor="@color/colorBlack"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:textSize="18sp"
+                                android:text="Ly Size L"
+                                android:id="@+id/size_L"
+                                android:checked="false" />
+                        </RadioGroup>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:weightSum="2"
+                            android:orientation="vertical">
+                            <TextView
+                                android:textColor="@color/colorBlack"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="20.000d"
+                                android:textSize="18sp"
+                                android:gravity="center"/>
+                            <TextView
+
+                                android:textColor="@color/colorBlack"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="25.000d"
+                                android:textSize="18sp"
+                                android:gravity="center"/>
+
+                        </LinearLayout>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Chọn topping"
+                            android:textSize="18sp"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:layout_alignParentLeft="true"
+                            />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="156dp"
+                        android:paddingLeft="7dp"
+                        android:paddingRight="18dp"
+                        android:background="@color/colorWhite">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:weightSum="4"
+                            android:layout_alignParentLeft="true"
+                            android:orientation="vertical">
+
+                            <CheckBox
+                                android:id="@+id/chk1"
+                                android:textColor="@color/colorBlack"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="Trân Châu"
+                                android:textSize="18sp"
+                                android:checked="false" />
+
+                            <CheckBox
+                                android:id="@+id/chk2"
+                                android:textColor="@color/colorBlack"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="Hạt Thủy Tinh"
+                                android:textSize="18sp"
+                                android:checked="false" />
+                            <CheckBox
+                                android:id="@+id/chk3"
+                                android:textColor="@color/colorBlack"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="Đậu Đỏ"
+                                android:textSize="18sp"
+                                android:checked="false" />
+                            <CheckBox
+                                android:id="@+id/chk4"
+                                android:textColor="@color/colorBlack"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="Đậu Đen"
+                                android:textSize="18sp"
+                                android:checked="false" />
+
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:weightSum="4"
+                            android:orientation="vertical">
+                            <TextView
+                                android:textColor="@color/colorBlack"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="5.000d"
+                                android:textSize="18sp"
+                                android:gravity="center"/>
+                            <TextView
+                                android:textColor="@color/colorBlack"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="5.000d"
+                                android:textSize="18sp"
+                                android:gravity="center"/>
+                            <TextView
+                                android:textColor="@color/colorBlack"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="3.000d"
+                                android:textSize="18sp"
+                                android:gravity="center"/>
+                            <TextView
+                                android:textColor="@color/colorBlack"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="4.000d"
+                                android:textSize="18sp"
+                                android:gravity="center"/>
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="8"
+            android:background="@color/colorRed"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/addToCard"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:alpha="0.7"
+                android:gravity="center"
+                android:text="Thêm vào giỏ"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/totalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:alpha="0.7"
+                android:gravity="center"
+                android:text="0 đ"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>

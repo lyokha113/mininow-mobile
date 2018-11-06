@@ -59,6 +59,7 @@ public class StoreRecycleAdapter extends RecyclerView.Adapter<StoreRecycleAdapte
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(activity, ProductActivity.class);
+            intent.putExtra("storeID", stores.get(position).getId());
             activity.startActivity(intent);
         });
     }

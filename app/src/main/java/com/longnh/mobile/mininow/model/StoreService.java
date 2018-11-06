@@ -2,18 +2,13 @@ package com.longnh.mobile.mininow.model;
 
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.longnh.mobile.mininow.entity.Store;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
 
 public class StoreService {
 
@@ -47,6 +42,20 @@ public class StoreService {
                             stores.add(store);
                         }
                         callback.onSuccess(stores);
+                    } else {
+                        Log.w("FIREBASE", "Error getting documents.", task.getException());
+                    }
+                });
+    }
+
+    public static void getStoreInfo(String storeID, final FirestoreCallback callback) {
+        db.collection("store").whereEqualTo("id", storeID).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            callback.onSuccess(document.toObject(Store.class));
+                            break;
+                        }
                     } else {
                         Log.w("FIREBASE", "Error getting documents.", task.getException());
                     }

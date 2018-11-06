@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,9 +36,9 @@ import static android.content.Context.LOCATION_SERVICE;
  */
 public class NearStoreFragment extends Fragment {
 
-    private static final long REFRESH_TIME = 1000 * 60 * 10;
+    private static final long REFRESH_TIME = 1000 * 60;
     private static final long REFRESH_DISTANCE = 1000;
-    private static final double LIMIT_DISTANCE = 10;
+    private static final double LIMIT_DISTANCE = 5;
     private final LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
@@ -85,17 +87,27 @@ public class NearStoreFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-        if (getActivity().checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && getActivity().checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(getActivity(), "Chưa được cấp quyền truy cập vị trí của bạn.", Toast.LENGTH_SHORT).show();
-            return;
+        if (result == null) {
+            locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+            if (getActivity().checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && getActivity().checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getActivity(), "Chưa được cấp quyền truy cập vị trí của bạn.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, REFRESH_TIME, REFRESH_DISTANCE, locationListener);
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            getStores(location);
+        } else {
+            setStoreList();
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, REFRESH_TIME, REFRESH_DISTANCE, locationListener);
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        getStores(location);
+    }
 
-
+    private void setStoreList() {
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        listStores.setLayoutManager(mLayoutManager);
+        listStores.setHasFixedSize(true);
+        listStores.setAdapter(adapter);
+        spinner.setVisibility(View.GONE);
     }
 
     @Override
@@ -132,14 +144,18 @@ public class NearStoreFragment extends Fragment {
                 result.sort(Comparator.comparing(Store::getDistance));
 
                 adapter = new StoreRecycleAdapter(getActivity(), stores);
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-                listStores.setLayoutManager(mLayoutManager);
-                listStores.setHasFixedSize(true);
-                listStores.setAdapter(adapter);
-                spinner.setVisibility(View.GONE);
+                setStoreList();
             });
         });
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
 }

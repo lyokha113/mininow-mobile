@@ -5,4 +5,11 @@
     <color name="colorAccent">#26A69A</color>
     <color name="colortTransparent">@android:color/transparent</color>
     <color name="corlorWindowBackground">#FEFEFE</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorRed">#e81a1a</color>
+    <color name="colorGrayLight">#ecebeb</color>
+    <color name="colorGrayDark">#707070</color>
+    <color name="colorBlueLight">#6397ec</color>
+    <color name="colorGreenLight">#72c46c</color>
 </resources>

@@ -18,9 +18,11 @@ public class Store implements Serializable {
     private String email;
     private String description;
     private String imgUrl;
+    private String bannerUrl;
     private Timestamp registerTime;
     private GeoPoint location;
     private String distance;
+
     public String getId() {
         return id;
     }
@@ -85,7 +87,6 @@ public class Store implements Serializable {
         this.registerTime = registerTime;
     }
 
-
     public String getDistance() {
         return distance;
     }
@@ -102,4 +103,11 @@ public class Store implements Serializable {
         this.location = location;
     }
 
+    public String getBannerUrl() {
+        return bannerUrl;
+    }
+
+    public void setBannerUrl(String bannerUrl) {
+        this.bannerUrl = bannerUrl;
+    }
 }

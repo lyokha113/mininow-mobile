@@ -1,11 +1,16 @@
 package com.longnh.mobile.mininow.adapter;
 
 import android.app.Activity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.longnh.mobile.mininow.R;
 import com.longnh.mobile.mininow.entity.Product;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -13,10 +18,12 @@ public class ProductGridAdapter extends BaseAdapter {
 
     private List<Product> products;
     private Activity activity;
+    private LayoutInflater layoutInflater;
 
-    public ProductGridAdapter(Activity activity,  List<Product> products) {
+    public ProductGridAdapter(Activity activity, List<Product> products) {
         this.activity = activity;
         this.products = products;
+        layoutInflater = LayoutInflater.from(this.activity);
     }
 
     @Override
@@ -34,9 +41,32 @@ public class ProductGridAdapter extends BaseAdapter {
         return position;
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.product_grid_item, null);
+            holder = new ViewHolder();
+            holder.productName = convertView.findViewById(R.id.product_name);
+            holder.productPrice = convertView.findViewById(R.id.product_price);
+            holder.productImg = convertView.findViewById(R.id.product_img);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+
+        Product product = products.get(position);
+        holder.productName.setText(product.getName());
+        holder.productPrice.setText(product.getPrice() + "VNĐ");
+        Picasso.get().load(product.getImgUrl()).resize(150,150).centerCrop().into(holder.productImg);
+
+        return convertView;
+    }
+
+    static class ViewHolder {
+        TextView productPrice;
+        TextView productName;
+        ImageView productImg;
     }
 }
