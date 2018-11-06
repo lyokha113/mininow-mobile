@@ -74,12 +74,12 @@
             android:background="@drawable/cart"/>
 
         <TextView
+            android:id="@+id/total_cart_price"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:textColor="#FFFFFF"
-            android:gravity="center_vertical"
-            android:text="100000 VND"/>
+            android:gravity="center_vertical" />
 
         <TextView
             android:layout_width="wrap_content"

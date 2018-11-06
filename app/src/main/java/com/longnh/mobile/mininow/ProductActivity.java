@@ -2,6 +2,8 @@ package com.longnh.mobile.mininow;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -24,23 +26,28 @@ import com.longnh.mobile.mininow.entity.Product;
 import com.longnh.mobile.mininow.entity.Store;
 import com.longnh.mobile.mininow.model.ProductService;
 import com.longnh.mobile.mininow.model.StoreService;
+import com.longnh.mobile.mininow.ultils.JsonUtil;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 
 public class ProductActivity extends AppCompatActivity {
 
+    private static final String ORDER_TEMPORARY = "order_temporary";
     private List<Product> products;
     private GridView gridProducts;
     private String storeID;
     private LinearLayout storeImg;
     private TextView storeName, storeAddress;
     private OrderItem orderItem;
+    private TextView totalOrderPrice;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +61,7 @@ public class ProductActivity extends AppCompatActivity {
 
         getProduct();
         getStoreInfo();
+        setTotal(0);
 
     }
 
@@ -62,6 +70,8 @@ public class ProductActivity extends AppCompatActivity {
         storeImg = findViewById(R.id.store_img_product);
         storeName = findViewById(R.id.store_name_product);
         storeAddress = findViewById(R.id.store_address_product);
+        totalOrderPrice = findViewById(R.id.total_cart_price);
+        sharedPreferences = getApplicationContext().getSharedPreferences(ORDER_TEMPORARY, Context.MODE_PRIVATE);
     }
 
     private void addEvents() {
@@ -108,7 +118,6 @@ public class ProductActivity extends AppCompatActivity {
 
         orderItem = new OrderItem();
         orderItem.setPrice(product.getPrice());
-        orderItem.setStoreID(product.getStoreID());
         orderItem.setProductID(product.getId());
 
         Dialog detail = new Dialog(this, R.style.MaterialDialogSheet);
@@ -214,10 +223,15 @@ public class ProductActivity extends AppCompatActivity {
             }
         });
 
-//        mBottomDialog.findViewById(R.id.addToCard).setOnClickListener(v -> {
-//            mBottomDialog.dismiss();
-//            final TextView textView = mBottomDialog.findViewById(R.id.viewSL);
-//        });
+        detail.findViewById(R.id.addToCard).setOnClickListener(v -> {
+            detail.dismiss();
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(product.getStoreID(), JsonUtil.getJson(orderItem));
+            editor.commit();
+
+            setTotal(orderItem.getTotalPrice());
+        });
 
 
         detail.getWindow().setGravity(Gravity.BOTTOM);
@@ -227,6 +241,21 @@ public class ProductActivity extends AppCompatActivity {
     private void hideKeyboard(Dialog dialog) {
         InputMethodManager inputMethodManager = (InputMethodManager) ProductActivity.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(dialog.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    private void setTotal(int price) {
+
+        Set<String> saveProducts = sharedPreferences.getStringSet(storeID, null);
+
+        int totalPrice = 0;
+        if (saveProducts != null) {
+            for (String saved : saveProducts) {
+                OrderItem obj = JsonUtil.getObject(saved, OrderItem.class);
+                totalPrice += obj.getTotalPrice();
+            }
+        }
+
+        totalOrderPrice.setText(String.valueOf(totalPrice + price) + " VND");
     }
 
 }
