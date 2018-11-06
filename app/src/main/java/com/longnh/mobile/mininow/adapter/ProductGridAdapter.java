@@ -58,8 +58,8 @@ public class ProductGridAdapter extends BaseAdapter {
 
         Product product = products.get(position);
         holder.productName.setText(product.getName());
-        holder.productPrice.setText(product.getPrice() + "VNĐ");
-        Picasso.get().load(product.getImgUrl()).resize(150,150).centerCrop().into(holder.productImg);
+        holder.productPrice.setText(product.getPrice() + " VNĐ");
+        Picasso.get().load(product.getImgUrl()).resize(180,150).centerCrop().into(holder.productImg);
 
         return convertView;
     }

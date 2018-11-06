@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/allOut"
     android:layout_width="match_parent"
@@ -61,12 +60,12 @@
                 android:weightSum="100">
 
                 <ImageView
+                    android:id="@+id/product_detail_img"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="16dp"
-
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_weight="28" />
 
                 <LinearLayout
@@ -75,32 +74,30 @@
                     android:layout_weight="70"
                     android:orientation="vertical"
                     android:paddingLeft="14dp"
-                    android:paddingTop="16dp"
+                    android:paddingTop="14dp"
                     android:paddingRight="5dp"
                     android:weightSum="3">
 
                     <TextView
+                        android:id="@+id/product_detail_name"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="0.7"
-                        android:text="XXX XXX XX"
                         android:textColor="@color/colorBlack"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/product_detail_price"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="0.7"
+                        android:layout_height="wrap_content"
                         android:alpha="0.7"
-                        android:text="0 đ"
                         android:textColor="@color/colorBlack"
                         android:textSize="16sp" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1.6"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <ImageButton
@@ -112,7 +109,7 @@
                             android:background="@drawable/add_circle_green_icon" />
 
                         <TextView
-                            android:id="@+id/viewSL"
+                            android:id="@+id/product_quantity"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_centerVertical="true"
@@ -129,21 +126,22 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_toLeftOf="@+id/viewSL"
+                            android:layout_toLeftOf="@+id/product_quantity"
                             android:background="@drawable/remove_circle_red_icon" />
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="15"
+                android:background="@color/colorWhite"
                 android:orientation="horizontal"
                 android:paddingLeft="10dp"
                 android:paddingTop="3dp"
                 android:paddingRight="10dp"
-                android:weightSum="100"
-                android:background="@color/colorWhite">
+                android:weightSum="100">
 
                 <ImageView
                     android:layout_width="0dp"
@@ -168,220 +166,24 @@
                     android:paddingLeft="6dp"
                     android:textSize="18sp" />
             </LinearLayout>
+
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="64"
-                android:background="@color/colorWhite">
+                android:background="@color/colorGrayLight">
+
                 <LinearLayout
-                    android:id="@+id/orderMoreDrink"
+                    android:id="@+id/extras_info"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:weightSum="100"
+                    android:background="@color/colorGrayLight"
                     android:orientation="vertical"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
-                    android:background="@color/colorGrayLight"
                     android:visibility="visible">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:text="Chọn size"
-                            android:textSize="18sp"
-                            android:textColor="@color/colorBlack"
-                            android:textStyle="bold"
-                            android:gravity="center"
-                            android:layout_alignParentLeft="true"
-                            />
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:paddingRight="5dp"
-                            android:paddingLeft="5dp"
-                            android:textColor="@color/colorWhite"
-                            android:layout_centerVertical="true"
-                            android:text="BẮT BUỘC"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:background="@drawable/rectangle_over_border_gray_dark"/>
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="78dp"
-                        android:paddingLeft="7dp"
-                        android:paddingRight="18dp"
-                        android:background="@color/colorWhite">
-                        <RadioGroup
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:id="@+id/group_Size"
-                            android:weightSum="2"
-                            android:layout_alignParentLeft="true">
-
-                            <RadioButton
-                                android:layout_width="wrap_content"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:text="Ly Size M"
-                                android:textSize="18sp"
-                                android:textColor="@color/colorBlack"
-                                android:id="@+id/size_M"
-                                android:checked="true" />
-
-                            <RadioButton
-                                android:textColor="@color/colorBlack"
-                                android:layout_width="wrap_content"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:textSize="18sp"
-                                android:text="Ly Size L"
-                                android:id="@+id/size_L"
-                                android:checked="false" />
-                        </RadioGroup>
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:weightSum="2"
-                            android:orientation="vertical">
-                            <TextView
-                                android:textColor="@color/colorBlack"
-                                android:layout_width="wrap_content"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:text="20.000d"
-                                android:textSize="18sp"
-                                android:gravity="center"/>
-                            <TextView
-
-                                android:textColor="@color/colorBlack"
-                                android:layout_width="wrap_content"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:text="25.000d"
-                                android:textSize="18sp"
-                                android:gravity="center"/>
-
-                        </LinearLayout>
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:text="Chọn topping"
-                            android:textSize="18sp"
-                            android:textColor="@color/colorBlack"
-                            android:textStyle="bold"
-                            android:gravity="center"
-                            android:layout_alignParentLeft="true"
-                            />
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="156dp"
-                        android:paddingLeft="7dp"
-                        android:paddingRight="18dp"
-                        android:background="@color/colorWhite">
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:weightSum="4"
-                            android:layout_alignParentLeft="true"
-                            android:orientation="vertical">
-
-                            <CheckBox
-                                android:id="@+id/chk1"
-                                android:textColor="@color/colorBlack"
-                                android:layout_width="wrap_content"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:text="Trân Châu"
-                                android:textSize="18sp"
-                                android:checked="false" />
-
-                            <CheckBox
-                                android:id="@+id/chk2"
-                                android:textColor="@color/colorBlack"
-                                android:layout_width="wrap_content"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:text="Hạt Thủy Tinh"
-                                android:textSize="18sp"
-                                android:checked="false" />
-                            <CheckBox
-                                android:id="@+id/chk3"
-                                android:textColor="@color/colorBlack"
-                                android:layout_width="wrap_content"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:text="Đậu Đỏ"
-                                android:textSize="18sp"
-                                android:checked="false" />
-                            <CheckBox
-                                android:id="@+id/chk4"
-                                android:textColor="@color/colorBlack"
-                                android:layout_width="wrap_content"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:text="Đậu Đen"
-                                android:textSize="18sp"
-                                android:checked="false" />
-
-
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:weightSum="4"
-                            android:orientation="vertical">
-                            <TextView
-                                android:textColor="@color/colorBlack"
-                                android:layout_width="wrap_content"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:text="5.000d"
-                                android:textSize="18sp"
-                                android:gravity="center"/>
-                            <TextView
-                                android:textColor="@color/colorBlack"
-                                android:layout_width="wrap_content"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:text="5.000d"
-                                android:textSize="18sp"
-                                android:gravity="center"/>
-                            <TextView
-                                android:textColor="@color/colorBlack"
-                                android:layout_width="wrap_content"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:text="3.000d"
-                                android:textSize="18sp"
-                                android:gravity="center"/>
-                            <TextView
-                                android:textColor="@color/colorBlack"
-                                android:layout_width="wrap_content"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:text="4.000d"
-                                android:textSize="18sp"
-                                android:gravity="center"/>
-
-                        </LinearLayout>
-                    </RelativeLayout>
-
                 </LinearLayout>
             </ScrollView>
-
         </LinearLayout>
 
         <RelativeLayout
@@ -412,7 +214,7 @@
                 android:layout_alignParentRight="true"
                 android:alpha="0.7"
                 android:gravity="center"
-                android:text="0 đ"
+                android:text="0 VND"
                 android:textColor="@color/colorWhite"
                 android:textSize="15dp"
                 android:textStyle="bold" />

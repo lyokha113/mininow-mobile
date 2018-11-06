@@ -1,7 +1,6 @@
 package com.longnh.mobile.mininow;
 
 
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -10,13 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.firestore.GeoPoint;
 import com.longnh.mobile.mininow.adapter.StoreRecycleAdapter;
 import com.longnh.mobile.mininow.entity.Store;
 import com.longnh.mobile.mininow.model.APIManager;
 import com.longnh.mobile.mininow.model.StoreService;
+import com.longnh.mobile.mininow.ultils.LocationUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -28,20 +28,21 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static android.content.Context.LOCATION_SERVICE;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class NearStoreFragment extends Fragment {
 
-    private static final long REFRESH_TIME = 1000 * 60;
-    private static final long REFRESH_DISTANCE = 1000;
     private static final double LIMIT_DISTANCE = 5;
-    private final LocationListener locationListener = new LocationListener() {
+
+    List<Store> result;
+    private ProgressBar spinner;
+    private StoreRecycleAdapter adapter;
+    private RecyclerView listStores;
+    LocationListener locationListener = new LocationListener() {
         @Override
-        public void onLocationChanged(final Location location) {
+        public void onLocationChanged(Location location) {
         }
 
         @Override
@@ -57,12 +58,7 @@ public class NearStoreFragment extends Fragment {
         }
     };
 
-    List<Store> result;
-    private ProgressBar spinner;
-    private StoreRecycleAdapter adapter;
-    private RecyclerView listStores;
-    private LocationManager locationManager;
-
+    private Location location;
 
     public NearStoreFragment() {
         // Required empty public constructor
@@ -88,15 +84,7 @@ public class NearStoreFragment extends Fragment {
         super.onResume();
 
         if (result == null) {
-            locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-            if (getActivity().checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && getActivity().checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getActivity(), "Chưa được cấp quyền truy cập vị trí của bạn.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, REFRESH_TIME, REFRESH_DISTANCE, locationListener);
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            getStores(location);
+            getStores(LocationUtils.getLastKnownLocation(getActivity(), locationListener));
         } else {
             setStoreList();
         }
@@ -113,10 +101,15 @@ public class NearStoreFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        locationManager.removeUpdates(locationListener);
     }
 
     private void getStores(final Location location) {
+
+        if (location == null) {
+            spinner.setVisibility(View.GONE);
+            return;
+        }
+
         spinner.setVisibility(View.VISIBLE);
         StoreService.getNearStores(data -> {
             final List<Store> stores = (List<Store>) data;
@@ -131,10 +124,10 @@ public class NearStoreFragment extends Fragment {
 
             APIManager.getStoreDistance(getActivity(), origin, destination, data1 -> {
                 List<String> distances = (List<String>) data1;
+                result = new ArrayList<>();
                 for (int i = 0; i < distances.size(); i++) {
                     String distance = distances.get(i);
                     double range = Double.parseDouble(distance.substring(0, distance.length() - 3));
-                    result = new ArrayList<>();
                     if (range <= LIMIT_DISTANCE) {
                         stores.get(i).setDistance(distance);
                         result.add(stores.get(i));
@@ -143,11 +136,12 @@ public class NearStoreFragment extends Fragment {
 
                 result.sort(Comparator.comparing(Store::getDistance));
 
-                adapter = new StoreRecycleAdapter(getActivity(), stores);
+                adapter = new StoreRecycleAdapter(getActivity(), result);
                 setStoreList();
             });
         });
     }
+
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
