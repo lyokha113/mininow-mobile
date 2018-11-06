@@ -1,5 +1,7 @@
 package com.longnh.mobile.mininow.entity;
 
+import java.sql.Timestamp;
+
 public class OrderItem {
 
     private String productID;
@@ -7,6 +9,9 @@ public class OrderItem {
     private int quantity;
     private int requireExtra;
     private int optionalExtra;
+    private int totalPrice;
+    private String description;
+    private Timestamp time;
 
     public String getProductID() {
         return productID;
@@ -52,4 +57,23 @@ public class OrderItem {
         return (price + optionalExtra + requireExtra) * quantity;
     }
 
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Timestamp getTime() {
+        return time;
+    }
+
+    public void setTime(Timestamp time) {
+        this.time = time;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

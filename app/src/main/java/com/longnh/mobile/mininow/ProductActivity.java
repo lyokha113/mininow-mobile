@@ -12,13 +12,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.longnh.mobile.mininow.adapter.ProductGridAdapter;
 import com.longnh.mobile.mininow.entity.OrderItem;
@@ -30,7 +30,9 @@ import com.longnh.mobile.mininow.ultils.JsonUtil;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -61,7 +63,7 @@ public class ProductActivity extends AppCompatActivity {
 
         getProduct();
         getStoreInfo();
-        setTotal(0);
+        setTotal();
 
     }
 
@@ -119,6 +121,7 @@ public class ProductActivity extends AppCompatActivity {
         orderItem = new OrderItem();
         orderItem.setPrice(product.getPrice());
         orderItem.setProductID(product.getId());
+        orderItem.setTime(new Timestamp(System.currentTimeMillis()));
 
         Dialog detail = new Dialog(this, R.style.MaterialDialogSheet);
         detail.setContentView(R.layout.product_detail);
@@ -226,11 +229,20 @@ public class ProductActivity extends AppCompatActivity {
         detail.findViewById(R.id.addToCard).setOnClickListener(v -> {
             detail.dismiss();
 
+            if (orderItem.getQuantity() == 0) return;
+
+            String description = ((EditText) detail.findViewById(R.id.produdct_detail_description)).getText().toString();
+            orderItem.setDescription(description);
+
+            Set<String> saveProducts = sharedPreferences.getStringSet(storeID, new HashSet<>());
+            saveProducts.add(JsonUtil.getJson(orderItem));
+
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(product.getStoreID(), JsonUtil.getJson(orderItem));
+            editor.clear();
+            editor.putStringSet(storeID, saveProducts);
             editor.commit();
 
-            setTotal(orderItem.getTotalPrice());
+            setTotal();
         });
 
 
@@ -243,7 +255,7 @@ public class ProductActivity extends AppCompatActivity {
         inputMethodManager.hideSoftInputFromWindow(dialog.getCurrentFocus().getWindowToken(), 0);
     }
 
-    private void setTotal(int price) {
+    private void setTotal() {
 
         Set<String> saveProducts = sharedPreferences.getStringSet(storeID, null);
 
@@ -255,7 +267,7 @@ public class ProductActivity extends AppCompatActivity {
             }
         }
 
-        totalOrderPrice.setText(String.valueOf(totalPrice + price) + " VND");
+        totalOrderPrice.setText(String.valueOf(totalPrice) + " VND");
     }
 
 }
