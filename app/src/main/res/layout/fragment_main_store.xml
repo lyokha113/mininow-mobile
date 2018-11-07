@@ -1,15 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainStoreFragment">
 
-    <ListView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/searchview_border">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_store"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="text"
+            android:padding="8dp"
+            app:iconifiedByDefault="false"
+            app:queryHint="Tên quán">
+
+        </androidx.appcompat.widget.SearchView>
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/main_stores"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </ListView>
 
+    </androidx.recyclerview.widget.RecyclerView>
 
-</FrameLayout>
+    <ProgressBar
+        android:id="@+id/progress_bar_main_store"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/circular_progress_bar" />
+
+</LinearLayout>

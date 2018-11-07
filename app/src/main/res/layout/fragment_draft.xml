@@ -36,14 +36,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:id="@+id/progress_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminateDrawable="@drawable/circular_progress_bar"
-        android:layout_gravity="center" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_tmp_order"
         android:padding="16dp"
@@ -52,4 +44,11 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:id="@+id/progress_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateDrawable="@drawable/circular_progress_bar"
+        android:layout_gravity="center" />
 </LinearLayout>

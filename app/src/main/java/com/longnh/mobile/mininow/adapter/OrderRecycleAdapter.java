@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.longnh.mobile.mininow.ProductActivity;
 import com.longnh.mobile.mininow.R;
+import com.longnh.mobile.mininow.TrackingActivity;
 import com.longnh.mobile.mininow.entity.OrderItem;
 import com.longnh.mobile.mininow.entity.Store;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
@@ -23,24 +24,24 @@ import java.util.Set;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class TemporaryOrderRecycleAdapter extends RecyclerView.Adapter<TemporaryOrderRecycleAdapter.ItemViewHolder> {
+public class OrderRecycleAdapter extends RecyclerView.Adapter<OrderRecycleAdapter.ItemViewHolder> {
 
     private List<Store> stores;
     private Activity activity;
 
-    public TemporaryOrderRecycleAdapter(Activity activity, List<Store> stores) {
+    public OrderRecycleAdapter(Activity activity, List<Store> stores) {
         this.stores = stores;
         this.activity = activity;
     }
 
     @Override
-    public TemporaryOrderRecycleAdapter.ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public OrderRecycleAdapter.ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.draft_row_item, parent, false);
-        return new TemporaryOrderRecycleAdapter.ItemViewHolder(item);
+        return new OrderRecycleAdapter.ItemViewHolder(item);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TemporaryOrderRecycleAdapter.ItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OrderRecycleAdapter.ItemViewHolder holder, int position) {
         Store store = stores.get(position);
         holder.name.setText(store.getName());
         holder.address.setText(store.getAddress());
@@ -55,7 +56,7 @@ public class TemporaryOrderRecycleAdapter extends RecyclerView.Adapter<Temporary
         holder.quantity.setText(quantity + " phần");
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(activity, ProductActivity.class);
+            Intent intent = new Intent(activity, TrackingActivity.class);
             intent.putExtra("storeID", stores.get(position).getId());
             activity.startActivity(intent);
         });

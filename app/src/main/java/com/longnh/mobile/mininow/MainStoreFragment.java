@@ -2,33 +2,36 @@ package com.longnh.mobile.mininow;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.ProgressBar;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.longnh.mobile.mininow.adapter.StoreRecycleAdapter;
 import com.longnh.mobile.mininow.entity.Store;
-import com.longnh.mobile.mininow.model.FirestoreCallback;
-import com.longnh.mobile.mininow.model.FirestoreDB;
 import com.longnh.mobile.mininow.model.StoreService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MainStoreFragment extends Fragment {
+
+    private StoreRecycleAdapter adapter;
+    private RecyclerView listStores;
+    private ProgressBar spinner;
+    private List<Store> stores;
+    private List<Store> all;
+    private SearchView searchStore;
 
     public MainStoreFragment() {
         // Required empty public constructor
@@ -45,5 +48,80 @@ public class MainStoreFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        listStores = getActivity().findViewById(R.id.main_stores);
+        spinner = getActivity().findViewById(R.id.progress_bar_main_store);
+        searchStore = getActivity().findViewById(R.id.search_store);
+
+        spinner.setVisibility(View.GONE);
+
+        getStores();
+
+        searchStore.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (!query.isEmpty()) {
+                    findStore(query);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+
+    }
+
+
+    private void setStoreList() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        listStores.setLayoutManager(layoutManager);
+        listStores.setHasFixedSize(true);
+        listStores.setAdapter(adapter);
+        spinner.setVisibility(View.GONE);
+    }
+
+    private void getStores() {
+        StoreService.getAll(data -> {
+            all = (List<Store>) data;
+        });
+    }
+
+    private void findStore(String name) {
+        spinner.setVisibility(View.VISIBLE);
+        stores = new ArrayList<>();
+        for (Store s : all) {
+            if (containsIgnoreCase(s.getName(), name)) {
+                stores.add(s);
+            }
+        }
+        adapter = new StoreRecycleAdapter(getActivity(), stores);
+        setStoreList();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    private static boolean containsIgnoreCase(String str, String searchStr)     {
+        if(str == null || searchStr == null) return false;
+
+        final int length = searchStr.length();
+        if (length == 0)
+            return true;
+
+        for (int i = str.length() - length; i >= 0; i--) {
+            if (str.regionMatches(true, i, searchStr, 0, length))
+                return true;
+        }
+        return false;
     }
 }

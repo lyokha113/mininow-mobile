@@ -77,9 +77,9 @@ public class StoreFragment extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFrag(new MainStoreFragment(), "Nổi Bật");
         adapter.addFrag(new NewStoreFragment(), "Mới");
         adapter.addFrag(new NearStoreFragment(), "Gần Tôi");
+        adapter.addFrag(new MainStoreFragment(), "Tìm");
         viewPager.setAdapter(adapter);
     }
 

@@ -48,7 +48,7 @@ public class CartItemRecycleAdapter extends RecyclerView.Adapter<CartItemRecycle
         OrderItem orderItem = items.get(position);
         holder.name.setText(orderItem.getName() + " x " + String.valueOf(orderItem.getQuantity()));
         holder.price.setText(String.valueOf(orderItem.getTotalPrice()) + " VND");
-        holder.itemView.setOnLongClickListener(v -> {
+        holder.itemView.setOnClickListener(v -> {
 
             AlertDialog.Builder alert = new AlertDialog.Builder(activity);
             alert.setTitle("Xác nhận");
@@ -84,7 +84,6 @@ public class CartItemRecycleAdapter extends RecyclerView.Adapter<CartItemRecycle
             });
             alert.setNegativeButton("Huỷ", (dialog, which) -> dialog.dismiss());
             alert.show();
-            return true;
         });
     }
 

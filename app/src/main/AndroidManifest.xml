@@ -30,9 +30,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProductActivity" />
-        <activity android:name=".OrderComfirmActivity" />
-        <activity android:name=".CartActivity"></activity>
+        <activity
+            android:name=".ProductActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".OrderComfirmActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".CartActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".TrackingActivity"></activity>
     </application>
 
 </manifest>
