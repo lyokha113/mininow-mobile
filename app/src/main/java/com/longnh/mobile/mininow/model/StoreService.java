@@ -9,6 +9,7 @@ import com.longnh.mobile.mininow.entity.Store;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class StoreService {
 
@@ -31,7 +32,7 @@ public class StoreService {
                 });
     }
 
-    public static void getNearStores(final FirestoreCallback callback) {
+    public static void getAll(final FirestoreCallback callback) {
         db.collection("store").get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -61,4 +62,6 @@ public class StoreService {
                     }
                 });
     }
+
+
 }

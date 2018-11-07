@@ -3,6 +3,7 @@ package com.longnh.mobile.mininow;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -26,6 +28,7 @@ import com.longnh.mobile.mininow.entity.Product;
 import com.longnh.mobile.mininow.entity.Store;
 import com.longnh.mobile.mininow.model.ProductService;
 import com.longnh.mobile.mininow.model.StoreService;
+import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.JsonUtil;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -41,7 +44,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ProductActivity extends AppCompatActivity {
 
-    private static final String ORDER_TEMPORARY = "order_temporary";
+
     private List<Product> products;
     private GridView gridProducts;
     private String storeID;
@@ -50,6 +53,8 @@ public class ProductActivity extends AppCompatActivity {
     private OrderItem orderItem;
     private TextView totalOrderPrice;
     private SharedPreferences sharedPreferences;
+    private TextView confirmCart;
+    private LinearLayout viewCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +78,29 @@ public class ProductActivity extends AppCompatActivity {
         storeName = findViewById(R.id.store_name_product);
         storeAddress = findViewById(R.id.store_address_product);
         totalOrderPrice = findViewById(R.id.total_cart_price);
-        sharedPreferences = getApplicationContext().getSharedPreferences(ORDER_TEMPORARY, Context.MODE_PRIVATE);
+        confirmCart = findViewById(R.id.confirm_cart);
+        viewCart = findViewById(R.id.view_cart);
+        sharedPreferences = getApplicationContext().getSharedPreferences(ConstantManager.ORDER_TEMPORARY, Context.MODE_PRIVATE);
     }
 
     private void addEvents() {
         gridProducts.setOnItemClickListener((parent, view, position, id) -> {
             orderProduct(products.get(position));
+        });
+
+        confirmCart.setOnClickListener(v -> {
+            if (totalOrderPrice.getText().toString().equals("0 VND")) return;
+            String address = storeAddress.getText().toString();
+            Intent intent = new Intent(this, OrderComfirmActivity.class);
+            intent.putExtra(ConstantManager.ORDER_CONFIRM, storeID);
+            intent.putExtra(ConstantManager.STORE_ADDRESS, address);
+            startActivity(intent);
+        });
+
+        viewCart.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CartActivity.class);
+            intent.putExtra(ConstantManager.ORDER_CONFIRM, storeID);
+            startActivity(intent);
         });
     }
 
@@ -121,6 +143,7 @@ public class ProductActivity extends AppCompatActivity {
         orderItem = new OrderItem();
         orderItem.setPrice(product.getPrice());
         orderItem.setProductID(product.getId());
+        orderItem.setName(product.getName());
         orderItem.setTime(new Timestamp(System.currentTimeMillis()));
 
         Dialog detail = new Dialog(this, R.style.MaterialDialogSheet);
@@ -238,9 +261,9 @@ public class ProductActivity extends AppCompatActivity {
             saveProducts.add(JsonUtil.getJson(orderItem));
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
+            editor.remove(storeID);
             editor.putStringSet(storeID, saveProducts);
-            editor.commit();
+            editor.apply();
 
             setTotal();
         });
@@ -270,4 +293,9 @@ public class ProductActivity extends AppCompatActivity {
         totalOrderPrice.setText(String.valueOf(totalPrice) + " VND");
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setTotal();
+    }
 }

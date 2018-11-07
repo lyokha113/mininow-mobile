@@ -12,4 +12,6 @@
     <color name="colorGrayDark">#707070</color>
     <color name="colorBlueLight">#6397ec</color>
     <color name="colorGreenLight">#72c46c</color>
+    <color name="white">#FFFFFF</color>
+    <color name="grey">#999999</color>
 </resources>

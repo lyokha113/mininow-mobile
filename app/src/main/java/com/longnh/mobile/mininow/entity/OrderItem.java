@@ -12,6 +12,7 @@ public class OrderItem {
     private int totalPrice;
     private String description;
     private Timestamp time;
+    private String name;
 
     public String getProductID() {
         return productID;
@@ -75,5 +76,13 @@ public class OrderItem {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

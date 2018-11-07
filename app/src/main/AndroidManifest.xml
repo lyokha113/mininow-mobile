@@ -31,6 +31,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ProductActivity" />
+        <activity android:name=".OrderComfirmActivity" />
+        <activity android:name=".CartActivity"></activity>
     </application>
 
 </manifest>

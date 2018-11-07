@@ -52,11 +52,13 @@ dependencies {
     implementation 'com.ss.bannerslider:bannerslider:2.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.pwittchen:infinitescroll:0.0.2'
+    implementation 'com.github.florent37:singledateandtimepicker:2.0.5'
     implementation 'com.google.firebase:firebase-core:16.0.5'
     implementation 'com.google.firebase:firebase-firestore:17.1.2'
     implementation 'com.google.firebase:firebase-storage:16.0.4'
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     implementation 'com.android.volley:volley:1.1.1'
     implementation(
             [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.5'],

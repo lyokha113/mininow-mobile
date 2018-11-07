@@ -34,8 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class NearStoreFragment extends Fragment {
 
-    private static final double LIMIT_DISTANCE = 5;
-
+    private static final double LIMIT_DISTANCE = 10;
     List<Store> result;
     private ProgressBar spinner;
     private StoreRecycleAdapter adapter;
@@ -58,7 +57,6 @@ public class NearStoreFragment extends Fragment {
         }
     };
 
-    private Location location;
 
     public NearStoreFragment() {
         // Required empty public constructor
@@ -111,7 +109,7 @@ public class NearStoreFragment extends Fragment {
         }
 
         spinner.setVisibility(View.VISIBLE);
-        StoreService.getNearStores(data -> {
+        StoreService.getAll(data -> {
             final List<Store> stores = (List<Store>) data;
             String origin = location.getLatitude() + "," + location.getLongitude();
             String destination = "";
