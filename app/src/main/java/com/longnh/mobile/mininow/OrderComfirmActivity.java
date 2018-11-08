@@ -18,12 +18,15 @@ import android.widget.Toast;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.longnh.mobile.mininow.adapter.OrderItemRecycleAdapter;
 import com.longnh.mobile.mininow.entity.Customer;
+import com.longnh.mobile.mininow.entity.Order;
 import com.longnh.mobile.mininow.entity.OrderItem;
 import com.longnh.mobile.mininow.model.APIManager;
+import com.longnh.mobile.mininow.model.OrderService;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.JsonUtil;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -60,6 +63,7 @@ public class OrderComfirmActivity extends AppCompatActivity {
     private int shipPriceVal;
     private int totalorderPriceVal;
     private String storeAddress;
+    private String storeName;
     private String desAddress;
     private ImageView customerImg;
 
@@ -74,8 +78,9 @@ public class OrderComfirmActivity extends AppCompatActivity {
         setOrderTime(new Date());
 
         Intent storeIntent = getIntent();
-        storeID = storeIntent.getStringExtra(ConstantManager.ORDER_CONFIRM);
+        storeID = storeIntent.getStringExtra(ConstantManager.STORE_ID);
         storeAddress = storeIntent.getStringExtra(ConstantManager.STORE_ADDRESS);
+        storeName = storeIntent.getStringExtra(ConstantManager.STORE_NAME);
 
         desAddress = ConstantManager.customer.getAddress();
 
@@ -142,6 +147,41 @@ public class OrderComfirmActivity extends AppCompatActivity {
             }
         });
 
+        submitOrder.setOnClickListener(v -> {
+            Order order = new Order();
+            order.setCusID(ConstantManager.customerID);
+            order.setCusAddress(customerAddress.getText().toString());
+            order.setCusName(customerName.getText().toString());
+            order.setCusPhone(customerPhone.getText().toString());
+            order.setDescription(description.getText().toString());
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm, dd/MM/yyyy");
+                Date parsedDate = dateFormat.parse(orderTime.getText().toString());
+                order.setExpectedTime(parsedDate);
+            } catch (Exception e) {
+                return;
+            }
+
+            order.setTotalPrice(totalorderPriceVal);
+            order.setStoreID(storeID);
+            order.setStatus(ConstantManager.ORDER_WAITING);
+            order.setDetail(JsonUtil.getJson(orderItemList));
+            order.setStoreName(storeName);
+            order.setStoreAddress(storeAddress);
+            order.setShipPrice(shipPriceVal);
+
+            String id = OrderService.createOrder(order);
+
+            SharedPreferences sharedPreferences = getApplication().getApplicationContext().getSharedPreferences(ConstantManager.ORDER_TEMPORARY, Context.MODE_PRIVATE);
+            SharedPreferences.Editor edit = sharedPreferences.edit();
+            edit.remove(storeID);
+            edit.apply();
+
+            Intent intent = new Intent(getApplicationContext(), TrackingActivity.class);
+            intent.putExtra("orderID", id);
+            startActivity(intent);
+            finish();
+        });
     }
 
     @Override

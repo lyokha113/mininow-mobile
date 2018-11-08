@@ -42,7 +42,7 @@ public class ShipperService {
                 });
     }
 
-    public static void updateShipperLocation(String shipperID, final FirestoreCallback callback) {
+    public static void trackingShipperLocation(String shipperID, final FirestoreCallback callback) {
         DocumentReference docRef = db.collection("tracking").document(shipperID);
         docRef.addSnapshotListener((documentSnapshot, e) -> {
             if (documentSnapshot != null && documentSnapshot.exists()) {

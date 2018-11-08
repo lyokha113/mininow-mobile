@@ -10,7 +10,6 @@
 
     <style name="Ratingbar" style="?android:attr/ratingBarStyleIndicator">
         <item name="android:maxHeight">16dp</item>
-
     </style>
 
     <style name="MaterialDialogSheet" parent="@android:style/Theme.Dialog">

@@ -10,10 +10,10 @@
         android:id="@+id/gmap"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="400dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="16dp"/>
 
     <LinearLayout
@@ -22,34 +22,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Quán Nghĩa Địa Mèo"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Giao hàng dự kiến: " />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:text="02/11/2018 15:00 - #6352482"
-                android:textColor="#000000" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,13 +33,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
                 android:text="Tổng tiền: " />
 
             <TextView
+                android:id="@+id/total_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="115,000 đ (2 phần) - Tiền mặt"
+                android:textSize="18sp"
                 android:textColor="#ff0000" />
         </LinearLayout>
 
@@ -81,13 +55,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
                 android:text="Đã thanh toán: " />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="0 đ" />
+                android:textSize="18sp"
+                android:text="0 VND" />
         </LinearLayout>
 
         <LinearLayout
@@ -100,13 +76,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
                 android:text="Thanh toán thêm: " />
 
             <TextView
+                android:id="@+id/total_price_pay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:text="115,000 đ" />
+                android:textSize="18sp"
+                android:layout_marginLeft="4dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -126,7 +104,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Lấy hàng"
+                    android:text="Shipper xác nhận"
                     android:textColor="#000000"
                     android:layout_marginTop="53dp"/>
                 <TextView
@@ -143,25 +121,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:orientation="vertical"
-                android:gravity="center_horizontal"
-                >
+                android:gravity="center_horizontal">
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_checked"/>
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/ic_line_vertical"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_checked"/>
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/ic_line_vertical"/>
-                <ImageView
+                    android:id="@+id/step_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_empty"/>
@@ -170,6 +132,25 @@
                     android:layout_height="18dp"
                     android:src="@drawable/ic_line_vertical"/>
                 <ImageView
+                    android:id="@+id/step_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_empty"/>
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_line_vertical"/>
+                <ImageView
+                    android:id="@+id/step_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_empty"/>
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_line_vertical"/>
+                <ImageView
+                    android:id="@+id/step_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_empty"/>
@@ -184,20 +165,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Xác nhận đơn hàng"
-                    android:textColor="#000000"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="14:12, 02/11/2018"/>
+                    android:text="Shop xác nhận"
+                    android:textColor="#000000" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
-                    android:text="Đang giao hàng"
-                    android:layout_marginTop="57dp"
-                    />
+                    android:text="Đã lấy hàng"
+                    android:layout_marginTop="57dp" />
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -208,17 +183,13 @@
             android:layout_gravity="center_vertical"
             android:gravity="center">
             <Button
-                android:layout_width="60dp"
-                android:layout_height="40dp"
+                android:id="@+id/cancel_button"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
                 android:text="HỦY"
-                android:textSize="14sp"
-                android:backgroundTint="#0000ff"/>
-            <Button
-                android:layout_marginLeft="12dp"
-                android:layout_width="50dp"
-                android:layout_height="35dp"
-                android:background="@drawable/ic_call_black_24dp"
-                android:backgroundTint="#00ff00"/>
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colorPrimary"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

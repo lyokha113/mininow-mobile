@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DMKActivity"
+    android:weightSum="100"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="100">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="100">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="40"
+                android:weightSum="100"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:background="@color/colorRed">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="20"
+                    android:textColor="@color/colorWhite"
+                    android:text="Đổi mật khẩu"
+                    android:textSize="20sp"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/arrow_left"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/inputText"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="60"
+                android:layout_gravity="bottom"
+                android:orientation="vertical"
+                android:weightSum="100"
+                android:paddingRight="42dp"
+                android:paddingLeft="42dp"
+                android:background="@color/colorWhite">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="30"
+                    android:textColor="@color/colorBlack"
+                    android:text="Mèo Mập Ku Te"
+                    android:gravity="center|bottom"
+                    android:textSize="22sp"
+                    android:layout_marginBottom="20dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="16">
+
+                    <EditText
+                        android:id="@+id/passNow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Mật khẩu hiện tại"
+                        android:inputType="textPassword"
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="16">
+
+                    <EditText
+                        android:id="@+id/passNew"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Mật khẩu mới"
+                        android:inputType="textPassword"
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="16">
+
+                    <EditText
+                        android:id="@+id/passNewConfirm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Xác nhận mật khẩu"
+                        android:inputType="textPassword"
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <Button
+                    android:onClick="clickToUpdate"
+                    android:id="@+id/inputShieldBtn"
+                    android:layout_width="150dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_weight="14"
+                    android:text="CẬP NHẬT"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    app:backgroundTint="@color/colorRed"
+                     />
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:background="@drawable/over_background"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="180dp"
+            >
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

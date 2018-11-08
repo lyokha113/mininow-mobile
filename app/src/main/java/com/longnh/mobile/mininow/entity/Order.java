@@ -1,30 +1,58 @@
 package com.longnh.mobile.mininow.entity;
 
-import com.google.firebase.Timestamp;
+
+import java.util.Date;
 
 public class Order {
 
-    private String orderID;
+    private String id;
     private String storeName;
     private String storeAddress;
-    private String shopID;
+    private String storeID;
     private String cusName;
     private String cusAddress;
     private String cusPhone;
+    private String cusID;
     private String shipperID;
     private int totalPrice;
-    private Timestamp expectedTime;
-    private Timestamp finishedTime;
-    private Timestamp orderTime;
+    private Date expectedTime;
+    private Date finishedTime;
     private String description;
-    private String status;
+    private int status;
+    private String detail;
+    private int shipPrice;
 
-    public String getShopID() {
-        return shopID;
+
+    public String getId() {
+        return id;
     }
 
-    public void setShopID(String shopID) {
-        this.shopID = shopID;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCusID() {
+        return cusID;
+    }
+
+    public void setCusID(String cusID) {
+        this.cusID = cusID;
+    }
+
+    public String getStoreID() {
+        return storeID;
+    }
+
+    public void setStoreID(String storeID) {
+        this.storeID = storeID;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public String getCusName() {
@@ -67,28 +95,20 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
-    public Timestamp getExpectedTime() {
+    public Date getExpectedTime() {
         return expectedTime;
     }
 
-    public void setExpectedTime(Timestamp expectedTime) {
+    public void setExpectedTime(Date expectedTime) {
         this.expectedTime = expectedTime;
     }
 
-    public Timestamp getFinishedTime() {
+    public Date getFinishedTime() {
         return finishedTime;
     }
 
-    public void setFinishedTime(Timestamp finishedTime) {
+    public void setFinishedTime(Date finishedTime) {
         this.finishedTime = finishedTime;
-    }
-
-    public Timestamp getOrderTime() {
-        return orderTime;
-    }
-
-    public void setOrderTime(Timestamp orderTime) {
-        this.orderTime = orderTime;
     }
 
     public String getDescription() {
@@ -99,20 +119,12 @@ public class Order {
         this.description = description;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
-    }
-
-    public String getOrderID() {
-        return orderID;
-    }
-
-    public void setOrderID(String orderID) {
-        this.orderID = orderID;
     }
 
     public String getStoreName() {
@@ -129,5 +141,13 @@ public class Order {
 
     public void setStoreAddress(String storeAddress) {
         this.storeAddress = storeAddress;
+    }
+
+    public int getShipPrice() {
+        return shipPrice;
+    }
+
+    public void setShipPrice(int shipPrice) {
+        this.shipPrice = shipPrice;
     }
 }

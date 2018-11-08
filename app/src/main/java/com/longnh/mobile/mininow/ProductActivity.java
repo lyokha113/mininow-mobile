@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -90,16 +89,16 @@ public class ProductActivity extends AppCompatActivity {
 
         confirmCart.setOnClickListener(v -> {
             if (totalOrderPrice.getText().toString().equals("0 VND")) return;
-            String address = storeAddress.getText().toString();
             Intent intent = new Intent(this, OrderComfirmActivity.class);
-            intent.putExtra(ConstantManager.ORDER_CONFIRM, storeID);
-            intent.putExtra(ConstantManager.STORE_ADDRESS, address);
+            intent.putExtra(ConstantManager.STORE_ID, storeID);
+            intent.putExtra(ConstantManager.STORE_ADDRESS, storeAddress.getText().toString());
+            intent.putExtra(ConstantManager.STORE_NAME, storeName.getText().toString());
             startActivity(intent);
         });
 
         viewCart.setOnClickListener(v -> {
             Intent intent = new Intent(this, CartActivity.class);
-            intent.putExtra(ConstantManager.ORDER_CONFIRM, storeID);
+            intent.putExtra(ConstantManager.STORE_ID, storeID);
             startActivity(intent);
         });
     }

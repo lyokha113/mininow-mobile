@@ -6,16 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Address;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import com.longnh.mobile.mininow.adapter.CartItemRecycleAdapter;
-import com.longnh.mobile.mininow.adapter.OrderItemRecycleAdapter;
 import com.longnh.mobile.mininow.entity.OrderItem;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.JsonUtil;
@@ -37,7 +32,7 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        storeID = getIntent().getStringExtra(ConstantManager.ORDER_CONFIRM);
+        storeID = getIntent().getStringExtra(ConstantManager.STORE_ID);
         addControls();
         addEvents();
 
