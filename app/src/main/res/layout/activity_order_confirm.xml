@@ -95,7 +95,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:inputType="textMultiLine"
-                    android:background="@null"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp" />
 
@@ -324,7 +323,6 @@
                     android:id="@+id/payment_cash"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="115,000đ"
                     android:textColor="@color/colorRed"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -345,10 +343,9 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/payment_momo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="115,000đ"
+                    android:text="Chưa hỗ trợ"
                     android:textColor="@color/colorGrayDark"
                     android:textSize="20sp"
                     android:textStyle="bold" />

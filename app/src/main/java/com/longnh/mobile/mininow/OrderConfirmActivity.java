@@ -26,10 +26,11 @@ import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.JsonUtil;
 import com.squareup.picasso.Picasso;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.ZoneOffset;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,31 +42,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class OrderComfirmActivity extends AppCompatActivity {
 
-    private EditText description;
-    private Button submitOrder;
     private LinearLayout listProducts;
-    private TextView changeOrderTime;
-    private TextView orderTime;
-    private EditText customerAddress;
-    private String storeID;
-    private TextView customerName;
-    private TextView customerPhone;
     private OrderItemRecycleAdapter adapter;
+    private ImageView customerImg;
     private RecyclerView orderItems;
     private List<OrderItem> orderItemList;
-    private TextView orderPrice;
-    private TextView shipDistance;
-    private TextView shipPrice;
-    private TextView totalOrderPrice;
-    private TextView paymentCash;
-    private TextView paymentMomo;
-    private int orderPriceVal;
-    private int shipPriceVal;
-    private int totalorderPriceVal;
-    private String storeAddress;
-    private String storeName;
-    private String desAddress;
-    private ImageView customerImg;
+    private TextView orderPrice, shipDistance, shipPrice, totalOrderPrice, paymentCash, customerName,
+            customerPhone, changeOrderTime, orderTime;
+    private EditText customerAddress, description;
+    private Button submitOrder;
+    private int orderPriceVal, shipPriceVal, totalorderPriceVal;
+    private String storeID, storeAddress, storeName, desAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +62,7 @@ public class OrderComfirmActivity extends AppCompatActivity {
         addControls();
         addEvents();
 
-        setOrderTime(new Date());
+        setOrderTime(LocalDateTime.now().plusMinutes(30));
 
         Intent storeIntent = getIntent();
         storeID = storeIntent.getStringExtra(ConstantManager.STORE_ID);
@@ -103,7 +90,6 @@ public class OrderComfirmActivity extends AppCompatActivity {
         shipPrice = findViewById(R.id.ship_price);
         totalOrderPrice = findViewById(R.id.total_order_price);
         paymentCash = findViewById(R.id.payment_cash);
-        paymentMomo = findViewById(R.id.payment_momo);
         customerImg = findViewById(R.id.customer_img);
     }
 
@@ -128,9 +114,9 @@ public class OrderComfirmActivity extends AppCompatActivity {
                         Date current = new Date();
                         current.setTime((new Date().getTime() + 3600000));
                         if (date.before(current)) {
-                            Toast.makeText(this, "Giờ giao mong muốn cần phải cách ít nhất 1 giờ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Giờ giao mong muốn cần phải cách ít nhất 30 phút", Toast.LENGTH_SHORT).show();
                         } else {
-                            setOrderTime(date);
+                            setOrderTime(LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()));
                         }
                     }).display();
         });
@@ -184,26 +170,9 @@ public class OrderComfirmActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if (v instanceof EditText) {
-                Rect outRect = new Rect();
-                v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
-                    v.clearFocus();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        }
-        return super.dispatchTouchEvent(event);
-    }
-
-    private void setOrderTime(Date date) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
-        orderTime.setText(dtf.format(date.toInstant().atOffset(ZoneOffset.of("+07:00")).toLocalDateTime()));
+    private void setOrderTime(LocalDateTime dateTime) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        orderTime.setText(dtf.format(dateTime));
     }
 
     private void setCustomerInfo() {
@@ -211,7 +180,6 @@ public class OrderComfirmActivity extends AppCompatActivity {
         customerAddress.setText(customer.getAddress());
         customerName.setText(customer.getName());
         customerPhone.setText(customer.getPhone());
-
         Picasso.get().load(customer.getImgUrl()).into(customerImg);
     }
 
@@ -250,13 +218,29 @@ public class OrderComfirmActivity extends AppCompatActivity {
                 totalorderPriceVal = shipPriceVal + orderPriceVal;
                 totalOrderPrice.setText(String.valueOf(totalorderPriceVal) + " VND");
                 paymentCash.setText(String.valueOf(totalorderPriceVal) + " VND");
-                paymentMomo.setText(String.valueOf(totalorderPriceVal) + " VND");
 
             } else {
                 Toast.makeText(this, "Không thể tìm thấy địa chỉ này. Vui lòng chọn lại", Toast.LENGTH_LONG).show();
                 customerAddress.requestFocus();
             }
         });
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
     }
 
 }
