@@ -1,36 +1,50 @@
 package com.longnh.mobile.mininow;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.longnh.mobile.mininow.adapter.OrderHistoryRecycleAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OrderHistoryFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link OrderHistoryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class OrderHistoryFragment extends Fragment {
 
 
+    private View view;
+    private List<Object> orderHistory = new ArrayList<>();
+    private RecyclerView rvItems;
+    private OrderHistoryRecycleAdapter adapter;
+
     public OrderHistoryFragment() {
-        // Required empty public constructor
     }
 
-
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_order_history, container, false);
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_order_history, container, false);
+
+        for (int i = 0; i < 20; i++) {
+            orderHistory.add(null);
+        }
+        updateList();
+        return view;
+    }
+
+    private void updateList() {
+        adapter = new OrderHistoryRecycleAdapter(getActivity(), orderHistory);
+        rvItems = view.findViewById(R.id.rvOrderHistory);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        rvItems.setLayoutManager(layoutManager);
+        rvItems.setHasFixedSize(true);
+        rvItems.setAdapter(adapter);
     }
 }

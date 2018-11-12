@@ -7,10 +7,12 @@
     android:layout_height="match_parent"
     android:weightSum="100"
     android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="100">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -24,11 +26,9 @@
                 android:weightSum="100"
                 android:orientation="vertical"
                 android:background="@color/colorRed">
-
-
             </LinearLayout>
+
             <LinearLayout
-                android:id="@+id/inputText"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="60"
@@ -38,6 +38,7 @@
                 android:paddingRight="42dp"
                 android:paddingLeft="42dp"
                 android:background="@color/colorWhite">
+
                 <TextView
                     android:id="@+id/custom_name_info"
                     android:layout_width="match_parent"
@@ -45,6 +46,7 @@
                     android:layout_weight="35"
                     android:textColor="@color/colorBlack"
                     android:gravity="center|bottom"
+                    android:text="name"
                     android:textSize="22sp"
                     android:layout_marginBottom="20dp"/>
 
@@ -61,6 +63,7 @@
                     android:textSize="22sp"
                     android:layout_marginBottom="20dp"
                     />
+
                 <TextView
                     android:id="@+id/change_password"
                     android:layout_width="match_parent"
@@ -72,6 +75,7 @@
                     android:gravity="center"
                     android:textSize="22sp"
                     android:layout_marginBottom="20dp"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -84,6 +88,7 @@
 
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="170dp"
             android:layout_height="170dp"

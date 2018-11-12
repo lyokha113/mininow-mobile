@@ -10,14 +10,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class DTTActivity extends AppCompatActivity {
+public class ChangeInformationActivity extends AppCompatActivity {
     Uri selectedUriImage;
     private EditText fullName, address, phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ttcn);
+        setContentView(R.layout.activity_change_information);
         innitView();
     }
 

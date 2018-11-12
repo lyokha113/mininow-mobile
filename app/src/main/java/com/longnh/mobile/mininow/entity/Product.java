@@ -3,6 +3,7 @@ package com.longnh.mobile.mininow.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Product implements Serializable {
 
@@ -12,8 +13,8 @@ public class Product implements Serializable {
     private int price;
     private String description;
     private String imgUrl;
-    private ArrayList<String> requireExtra;
-    private ArrayList<String> optionalExtra;
+    private Map<String, Integer> requireExtra;
+    private Map<String, Integer> optionalExtra;
 
     public String getId() {
         return id;
@@ -63,19 +64,19 @@ public class Product implements Serializable {
         this.imgUrl = imgUrl;
     }
 
-    public ArrayList<String> getRequireExtra() {
+    public Map<String, Integer> getRequireExtra() {
         return requireExtra;
     }
 
-    public void setRequireExtra(ArrayList<String> requireExtra) {
+    public void setRequireExtra(Map<String, Integer> requireExtra) {
         this.requireExtra = requireExtra;
     }
 
-    public ArrayList<String> getOptionalExtra() {
+    public Map<String, Integer> getOptionalExtra() {
         return optionalExtra;
     }
 
-    public void setOptionalExtra(ArrayList<String> optionalExtra) {
+    public void setOptionalExtra(Map<String, Integer> optionalExtra) {
         this.optionalExtra = optionalExtra;
     }
 }

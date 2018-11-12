@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.longnh.mobile.mininow.adapter.TemporaryOrderRecycleAdapter;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,12 +29,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class DraftFragment extends Fragment {
 
-    private LinearLayout draftFragment;
     private SharedPreferences sharedPreferences;
     private List<Store> stores;
     private RecyclerView listStore;
     private TemporaryOrderRecycleAdapter adapter;
     private ProgressBar spinner;
+    private LinearLayout removeAll;
 
     public DraftFragment() {
         // Required empty public constructor
@@ -49,16 +51,36 @@ public class DraftFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        draftFragment = getActivity().findViewById(R.id.draft_fragment);
+        sharedPreferences = getContext().getSharedPreferences(ConstantManager.ORDER_TEMPORARY, Context.MODE_PRIVATE);
         listStore = getActivity().findViewById(R.id.list_tmp_order);
         spinner = getActivity().findViewById(R.id.progress_spinner);
+        removeAll = getActivity().findViewById(R.id.remove_all);
+
+        removeAll.setOnClickListener(v -> {
+            if (stores.size() == 0) return;
+            AlertDialog.Builder alert = new AlertDialog.Builder(DraftFragment.this.getActivity());
+            alert.setTitle("Xác nhận");
+            alert.setMessage("Bạn có muốn xoá toàn bộ đơn nháp ?");
+            alert.setPositiveButton("Xoá", (dialog, which) -> {
+                SharedPreferences.Editor edit = sharedPreferences.edit();
+                edit.clear();
+                edit.apply();
+                stores.clear();
+                adapter.notifyDataSetChanged();
+                dialog.dismiss();
+
+            });
+            alert.setNegativeButton("Huỷ", (dialog, which) -> dialog.dismiss());
+            alert.show();
+        });
+
         getAllTemporaryOrder();
     }
 
     private void getAllTemporaryOrder() {
         spinner.setVisibility(View.VISIBLE);
 
-        sharedPreferences = getContext().getSharedPreferences(ConstantManager.ORDER_TEMPORARY, Context.MODE_PRIVATE);
+
 
         Set<String> keys = sharedPreferences.getAll().keySet();
         stores = new ArrayList<>();
@@ -76,8 +98,6 @@ public class DraftFragment extends Fragment {
             }
 
             spinner.setVisibility(View.GONE);
-            draftFragment.setBackground(null);
-
             adapter = new TemporaryOrderRecycleAdapter(getActivity(), stores);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
             listStore.setLayoutManager(layoutManager);

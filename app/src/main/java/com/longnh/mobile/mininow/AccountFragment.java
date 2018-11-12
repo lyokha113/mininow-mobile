@@ -45,7 +45,7 @@ public class AccountFragment extends Fragment {
         cusImg = getActivity().findViewById(R.id.custom_img_info);
 
         changeInfo.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), DTTActivity.class);
+            Intent intent = new Intent(getActivity(), ChangeInformationActivity.class);
             startActivity(intent);
         });
 

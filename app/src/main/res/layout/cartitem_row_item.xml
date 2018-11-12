@@ -2,22 +2,87 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
+    android:background="@drawable/border_bottom"
     android:orientation="horizontal"
-    android:background="@drawable/border_bottom">
+    android:padding="8dp"
+    android:weightSum="100">
 
-    <TextView
-        android:id="@+id/item_name"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingRight="16dp"
-        android:textSize="20sp"/>
+        android:layout_weight="70"
+        android:orientation="vertical"
+        android:paddingLeft="4dp"
+        android:paddingTop="4dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="4dp">
 
-    <TextView
-        android:id="@+id/item_price"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/item_extra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:textColor="@color/grey"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:textSize="20sp"/>
+        android:layout_weight="30"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/btnAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/add_circle_green_icon" />
+
+            <TextView
+                android:id="@+id/product_quantity"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/btnAdd"
+                android:background="@drawable/rectangle_border_black"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btnSub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/product_quantity"
+                android:background="@drawable/remove_circle_red_icon" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/item_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="bottom|right"
+            android:textColor="@color/grey"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 </LinearLayout>

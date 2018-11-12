@@ -11,6 +11,7 @@ import com.longnh.mobile.mininow.R;
 import com.longnh.mobile.mininow.entity.OrderItem;
 
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +37,22 @@ public class OrderItemRecycleAdapter extends RecyclerView.Adapter<OrderItemRecyc
         OrderItem orderItem = items.get(position);
         holder.name.setText(orderItem.getName() + " x " + String.valueOf(orderItem.getQuantity()));
         holder.price.setText(String.valueOf(orderItem.getTotalPrice()) + " VND");
+
+        String extra = "";
+        Map<String, Integer> require = orderItem.getRequireExtra();
+        if (require != null) {
+            for (Map.Entry<String, Integer> item : require.entrySet()) {
+                extra += item.getKey() + "\n";
+            }
+        }
+
+        Map<String, Integer> optional = orderItem.getOptionalExtra();
+        if (optional != null) {
+            for (Map.Entry<String, Integer> item : optional.entrySet()) {
+                extra += item.getKey() + "\n";
+            }
+        }
+        holder.extra.setText(extra);
     }
 
     @Override
@@ -46,12 +63,14 @@ public class OrderItemRecycleAdapter extends RecyclerView.Adapter<OrderItemRecyc
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
         private TextView name;
+        private TextView extra;
         private TextView price;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.item_name);
             price = itemView.findViewById(R.id.item_price);
+            extra = itemView.findViewById(R.id.item_extra);
         }
     }
 

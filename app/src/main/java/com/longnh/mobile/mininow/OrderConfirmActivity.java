@@ -26,7 +26,6 @@ import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.JsonUtil;
 import com.squareup.picasso.Picasso;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -40,7 +39,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class OrderComfirmActivity extends AppCompatActivity {
+public class OrderConfirmActivity extends AppCompatActivity {
 
     private LinearLayout listProducts;
     private OrderItemRecycleAdapter adapter;
@@ -57,7 +56,7 @@ public class OrderComfirmActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_comfirm);
+        setContentView(R.layout.activity_order_confirm);
 
         addControls();
         addEvents();

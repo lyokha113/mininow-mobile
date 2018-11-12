@@ -32,10 +32,10 @@ import com.longnh.mobile.mininow.ultils.JsonUtil;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,16 +44,14 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ProductActivity extends AppCompatActivity {
 
 
-    private List<Product> products;
+
     private GridView gridProducts;
-    private String storeID;
-    private LinearLayout storeImg;
-    private TextView storeName, storeAddress;
-    private OrderItem orderItem;
-    private TextView totalOrderPrice;
+    private LinearLayout storeImg, viewCart;
+    private TextView storeName, storeAddress, totalOrderPrice, confirmCart;
     private SharedPreferences sharedPreferences;
-    private TextView confirmCart;
-    private LinearLayout viewCart;
+    private String storeID;
+    private OrderItem orderItem;
+    private List<Product> products;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +87,7 @@ public class ProductActivity extends AppCompatActivity {
 
         confirmCart.setOnClickListener(v -> {
             if (totalOrderPrice.getText().toString().equals("0 VND")) return;
-            Intent intent = new Intent(this, OrderComfirmActivity.class);
+            Intent intent = new Intent(this, OrderConfirmActivity.class);
             intent.putExtra(ConstantManager.STORE_ID, storeID);
             intent.putExtra(ConstantManager.STORE_ADDRESS, storeAddress.getText().toString());
             intent.putExtra(ConstantManager.STORE_NAME, storeName.getText().toString());
@@ -99,6 +97,8 @@ public class ProductActivity extends AppCompatActivity {
         viewCart.setOnClickListener(v -> {
             Intent intent = new Intent(this, CartActivity.class);
             intent.putExtra(ConstantManager.STORE_ID, storeID);
+            intent.putExtra(ConstantManager.STORE_ADDRESS, storeAddress.getText().toString());
+            intent.putExtra(ConstantManager.STORE_NAME, storeName.getText().toString());
             startActivity(intent);
         });
     }
@@ -136,14 +136,12 @@ public class ProductActivity extends AppCompatActivity {
         });
     }
 
-
     public void orderProduct(Product product) {
 
         orderItem = new OrderItem();
         orderItem.setPrice(product.getPrice());
         orderItem.setProductID(product.getId());
         orderItem.setName(product.getName());
-        orderItem.setTime(new Timestamp(System.currentTimeMillis()));
 
         Dialog detail = new Dialog(this, R.style.MaterialDialogSheet);
         detail.setContentView(R.layout.product_detail);
@@ -157,8 +155,8 @@ public class ProductActivity extends AppCompatActivity {
         TextView price = detail.findViewById(R.id.product_detail_price);
         price.setText(product.getPrice() + " VND");
 
-        ArrayList<String> requires = product.getRequireExtra();
-        ArrayList<String> optionals = product.getOptionalExtra();
+        Map<String, Integer> requires = product.getRequireExtra();
+        Map<String, Integer> optionals = product.getOptionalExtra();
 
         TextView total = detail.findViewById(R.id.totalPrice);
 
@@ -170,28 +168,32 @@ public class ProductActivity extends AppCompatActivity {
             LinearLayout values = parent.findViewById(R.id.require_value);
             extraView.addView(parent);
 
-            for (int i = 0; i < requires.size(); i += 2) {
+            boolean isFirst = true;
+            for (Map.Entry<String, Integer> require : requires.entrySet()) {
+
+                String itemName = require.getKey();
+                Integer itemPrice = require.getValue();
 
                 RadioButton item = (RadioButton) LayoutInflater.from(this).inflate(R.layout.radio_item, items, false);
-                item.setText(requires.get(i));
+                item.setText(itemName);
                 items.addView(item);
-                item.setId(i + 1);
 
                 TextView value = (TextView) LayoutInflater.from(this).inflate(R.layout.textview_value, items, false);
-                value.setText(requires.get(i + 1) + " VND");
+                value.setText(itemPrice + " VND");
                 values.addView(value);
 
                 item.setOnClickListener(v -> {
-                    int extra = Integer.parseInt(requires.get(item.getId()));
-                    orderItem.setRequireExtra(extra);
+                    orderItem.getRequireExtra().clear();
+                    orderItem.getRequireExtra().put(itemName, itemPrice);
                     total.setText(orderItem.getTotalPrice() + " VND");
                 });
 
-                if (i == 0) {
+                if (isFirst) {
                     item.performClick();
+                    isFirst= false;
                 }
-            }
 
+            }
         }
 
         if (optionals != null) {
@@ -200,20 +202,25 @@ public class ProductActivity extends AppCompatActivity {
             LinearLayout values = parent.findViewById(R.id.option_value);
             extraView.addView(parent);
 
-            for (int i = 0; i < optionals.size(); i += 2) {
+            for (Map.Entry<String, Integer> optional : optionals.entrySet()) {
+
+                String itemName = optional.getKey();
+                Integer itemPrice = optional.getValue();
+
                 CheckBox item = (CheckBox) LayoutInflater.from(this).inflate(R.layout.checkbox_item, items, false);
-                item.setText(optionals.get(i));
+                item.setText(itemName);
                 items.addView(item);
-                item.setId(i + 1);
 
                 TextView value = (TextView) LayoutInflater.from(this).inflate(R.layout.textview_value, items, false);
-                value.setText(optionals.get(i + 1) + " VND");
+                value.setText(itemPrice + " VND");
                 values.addView(value);
 
                 item.setOnClickListener(v -> {
-                    int extra = Integer.parseInt(optionals.get(item.getId()));
-                    int current = orderItem.getOptionalExtra();
-                    orderItem.setOptionalExtra(item.isChecked() ? current + extra : current - extra);
+                    if (item.isChecked()) {
+                        orderItem.getOptionalExtra().put(itemName, itemPrice);
+                    } else {
+                        orderItem.getOptionalExtra().remove(itemName);
+                    }
                     total.setText(orderItem.getTotalPrice() + " VND");
                 });
             }
@@ -256,14 +263,27 @@ public class ProductActivity extends AppCompatActivity {
             String description = ((EditText) detail.findViewById(R.id.produdct_detail_description)).getText().toString();
             orderItem.setDescription(description);
 
-            Set<String> saveProducts = sharedPreferences.getStringSet(storeID, new HashSet<>());
-            saveProducts.add(JsonUtil.getJson(orderItem));
+            Set<String> savedProducts = new HashSet<>(
+                    sharedPreferences.getStringSet(storeID, new HashSet<>()));
 
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove(storeID);
-            editor.putStringSet(storeID, saveProducts);
-            editor.apply();
+            List<String> toRemove = new ArrayList<>();
+            savedProducts.forEach(ele -> {
+                OrderItem savedItem = JsonUtil.getObject(ele, OrderItem.class);
+                if (savedItem.getProductID().equals(orderItem.getProductID())
+                        && savedItem.getRequireExtra().equals(orderItem.getRequireExtra())
+                        && savedItem.getOptionalExtra().equals(orderItem.getOptionalExtra())) {
+                    orderItem.setQuantity(savedItem.getQuantity() + orderItem.getQuantity());
+                    toRemove.add(ele);
+                }
+            });
 
+            savedProducts.removeAll(toRemove);
+            savedProducts.add(JsonUtil.getJson(orderItem));
+
+            SharedPreferences.Editor edit = sharedPreferences.edit();
+            edit.remove(storeID);
+            edit.putStringSet(storeID, savedProducts);
+            edit.apply();
             setTotal();
         });
 
