@@ -1,9 +1,7 @@
 package com.longnh.mobile.mininow;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -11,33 +9,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.GeoPoint;
-import com.longnh.mobile.mininow.adapter.CartItemRecycleAdapter;
 import com.longnh.mobile.mininow.entity.Order;
-import com.longnh.mobile.mininow.model.FirestoreCallback;
 import com.longnh.mobile.mininow.model.OrderService;
 import com.longnh.mobile.mininow.model.ShipperService;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.LocationUtils;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class TrackingActivity extends AppCompatActivity {
 
@@ -61,7 +49,7 @@ public class TrackingActivity extends AppCompatActivity {
     };
     private SupportMapFragment mapFragment;
     private GoogleMap gmap;
-    private String orderID;
+    private long orderID;
     private Order order;
     private TextView price, pricePay;
     private ImageView step1, step2, step3, step4;
@@ -76,8 +64,7 @@ public class TrackingActivity extends AppCompatActivity {
         addEvents();
 
         Intent intent = getIntent();
-        orderID = intent.getStringExtra("orderID");
-
+        orderID = intent.getLongExtra("orderID", 0);
         getOrderInfo();
     }
 
@@ -87,7 +74,7 @@ public class TrackingActivity extends AppCompatActivity {
             alert.setTitle("Xác nhận");
             alert.setMessage("Bạn có muốn huỷ đơn hàng này ?");
             alert.setPositiveButton("Huỷ", (dialog, which) -> {
-                OrderService.cancleOrder(orderID);
+                OrderService.cancleOrder(getApplicationContext(), orderID, ConstantManager.ORDER_REJECTED, null);
                 dialog.dismiss();
                 finish();
             });
@@ -122,7 +109,7 @@ public class TrackingActivity extends AppCompatActivity {
         setMap(new LatLng(location.getLatitude(), location.getLongitude()));
         setMarker(new LatLng(location.getLatitude(), location.getLongitude()), "Vị trí của bạn", true);
 
-        trackingOrder();
+//        trackingOrder();
 
     }
 
@@ -143,70 +130,69 @@ public class TrackingActivity extends AppCompatActivity {
     }
 
     private void getOrderInfo() {
-        OrderService.getOrderInfo(orderID, data -> {
+        OrderService.getOrderInfo(getApplicationContext(), orderID, data -> {
             order = (Order) data;
-
-            price.setText(order.getTotalPrice() + " VND - Tiền mặt");
-            pricePay.setText(order.getTotalPrice() + " VND");
+            price.setText((order.getShipPrice() + order.getProductPrice()) + " VND - Tiền mặt");
+            pricePay.setText((order.getShipPrice() + order.getProductPrice()) + " VND");
         });
     }
 
-    private void trackingOrder() {
-        OrderService.trackingOrderStatus(orderID, data -> {
-            Long status = (Long) data;
-            if (status == ConstantManager.ORDER_APPROVE) {
-                step1.setImageResource(R.drawable.ic_checked);
-            }
+//    private void trackingOrder() {
+//        OrderService.trackingOrderStatus(orderID, data -> {
+//            Long status = (Long) data;
+//            if (status == ConstantManager.ORDER_APPROVE) {
+//                step1.setImageResource(R.drawable.ic_checked);
+//            }
+//
+//            if (status == ConstantManager.ORDER_ACCEPTED) {
+//                step1.setImageResource(R.drawable.ic_checked);
+//                step2.setImageResource(R.drawable.ic_checked);
+//                cancel.setVisibility(View.GONE);
+//                OrderService.getShipperOfOrder(orderID, shipper -> {
+//                    String shipperID = (String) shipper;
+//                    trackingShipper(shipperID);
+//                });
+//            }
+//
+//            if (status == ConstantManager.ORDER_PICKED) {
+//                step1.setImageResource(R.drawable.ic_checked);
+//                step2.setImageResource(R.drawable.ic_checked);
+//                step3.setImageResource(R.drawable.ic_checked);
+//                cancel.setVisibility(View.GONE);
+//            }
+//
+//            if (status == ConstantManager.ORDER_REJECTED) {
+//                android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(this);
+//                alert.setTitle("Thông báo");
+//                alert.setMessage("Đơn hàng đã bị huỷ");
+//                alert.setPositiveButton("Đóng", null);
+//                alert.show();
+//            }
+//
+//            if (status == ConstantManager.ORDER_DONE) {
+//                android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(this);
+//                alert.setTitle("Thông báo");
+//                alert.setMessage("Đơn hàng giao thành công");
+//                alert.setPositiveButton("Đóng", null);
+//                alert.show();
+//            }
+//
+//            if (status == ConstantManager.ORDER_FAILED) {
+//                android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(this);
+//                alert.setTitle("Thông báo");
+//                alert.setMessage("Đơn hàng giao thất bại");
+//                alert.setPositiveButton("Đóng", null);
+//                alert.show();
+//            }
+//        });
+//    }
 
-            if (status == ConstantManager.ORDER_ACCEPTED) {
-                step1.setImageResource(R.drawable.ic_checked);
-                step2.setImageResource(R.drawable.ic_checked);
-                cancel.setVisibility(View.GONE);
-                OrderService.getShipperOfOrder(orderID, shipper -> {
-                    String shipperID = (String) shipper;
-                    trackingShipper(shipperID);
-                });
-            }
-
-            if (status == ConstantManager.ORDER_PICKED) {
-                step1.setImageResource(R.drawable.ic_checked);
-                step2.setImageResource(R.drawable.ic_checked);
-                step3.setImageResource(R.drawable.ic_checked);
-                cancel.setVisibility(View.GONE);
-            }
-
-            if (status == ConstantManager.ORDER_REJECTED) {
-                android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(this);
-                alert.setTitle("Thông báo");
-                alert.setMessage("Đơn hàng đã bị huỷ");
-                alert.setPositiveButton("Đóng", null);
-                alert.show();
-            }
-
-            if (status == ConstantManager.ORDER_DONE) {
-                android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(this);
-                alert.setTitle("Thông báo");
-                alert.setMessage("Đơn hàng giao thành công");
-                alert.setPositiveButton("Đóng", null);
-                alert.show();
-            }
-
-            if (status == ConstantManager.ORDER_FAILED) {
-                android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(this);
-                alert.setTitle("Thông báo");
-                alert.setMessage("Đơn hàng giao thất bại");
-                alert.setPositiveButton("Đóng", null);
-                alert.show();
-            }
-        });
-    }
-
-    private void trackingShipper(String shipperID) {
-        ShipperService.trackingShipperLocation(shipperID, data -> {
-            GeoPoint loc = (GeoPoint) data;
-            setMap(new LatLng(loc.getLatitude(), loc.getLongitude()));
-            setMarker(new LatLng(loc.getLatitude(), loc.getLongitude()), "Vị trí shipper", false);
-        });
-    }
+//    private void trackingShipper(String shipperID) {
+//        ShipperService.trackingShipperLocation(shipperID, data -> {
+//            GeoPoint loc = (GeoPoint) data;
+//            setMap(new LatLng(loc.getLatitude(), loc.getLongitude()));
+//            setMarker(new LatLng(loc.getLatitude(), loc.getLongitude()), "Vị trí shipper", false);
+//        });
+//    }
 
 }

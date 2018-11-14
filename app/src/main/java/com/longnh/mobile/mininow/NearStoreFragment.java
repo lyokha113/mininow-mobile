@@ -3,18 +3,14 @@ package com.longnh.mobile.mininow;
 
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.location.LocationServices;
-import com.google.firebase.firestore.GeoPoint;
 import com.longnh.mobile.mininow.adapter.StoreRecycleAdapter;
 import com.longnh.mobile.mininow.entity.Store;
-import com.longnh.mobile.mininow.model.APIManager;
 import com.longnh.mobile.mininow.model.StoreService;
 import com.longnh.mobile.mininow.ultils.LocationUtils;
 
@@ -109,18 +105,17 @@ public class NearStoreFragment extends Fragment {
         }
 
         spinner.setVisibility(View.VISIBLE);
-        StoreService.getAll(data -> {
+        StoreService.getAll(getContext(), data -> {
             final List<Store> stores = (List<Store>) data;
             String origin = location.getLatitude() + "," + location.getLongitude();
             String destination = "";
             for (Store store : stores) {
-                GeoPoint location1 = store.getLocation();
-                destination += location1.getLatitude() + "," + location1.getLongitude() + "|";
+                destination += store.getLatitude() + "," + store.getLongitude() + "|";
             }
 
             destination = destination.substring(0, destination.length() - 1);
 
-            APIManager.getStoreDistance(getActivity(), origin, destination, data1 -> {
+            StoreService.getStoreDistance(getActivity(), origin, destination, data1 -> {
                 List<String> distances = (List<String>) data1;
                 result = new ArrayList<>();
                 for (int i = 0; i < distances.size(); i++) {

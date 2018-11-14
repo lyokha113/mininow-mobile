@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".OngoingFragment"
-    android:background="@drawable/xedap">
+    tools:context=".OngoingFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_ongoing_order"
@@ -15,12 +14,4 @@
         android:layout_height="wrap_content">
 
     </androidx.recyclerview.widget.RecyclerView>
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:id="@+id/progress_spinner_ongoing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminateDrawable="@drawable/circular_progress_bar"
-        android:layout_gravity="center" />
 </LinearLayout>

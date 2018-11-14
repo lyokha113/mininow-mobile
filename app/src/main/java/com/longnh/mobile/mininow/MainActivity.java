@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setCurrentCustomer() {
-        CustomerService.getCustomerInfo(ConstantManager.customerID, data -> {
+        CustomerService.getCustomerInfo(getApplicationContext(), ConstantManager.customerID, data -> {
             ConstantManager.customer = (Customer) data;
         });
     }

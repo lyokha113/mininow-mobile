@@ -42,8 +42,8 @@ public class StoreRecycleAdapter extends RecyclerView.Adapter<StoreRecycleAdapte
         holder.storeAddress.setText(store.getAddress());
         holder.storeDescription.setText(store.getDescription());
 
-        if (store.getImgUrl() != null && !store.getImgUrl().isEmpty()) {
-            Picasso.get().load(store.getImgUrl())
+        if (store.getImgURL() != null && !store.getImgURL().isEmpty()) {
+            Picasso.get().load(store.getImgURL())
                     .resize(110, 80)
                     .centerCrop()
                     .into(holder.storeImg);

@@ -84,7 +84,7 @@ public class MainStoreFragment extends Fragment {
     }
 
     private void getStores() {
-        StoreService.getAll(data -> {
+        StoreService.getAll(getContext(), data -> {
             all = (List<Store>) data;
         });
     }

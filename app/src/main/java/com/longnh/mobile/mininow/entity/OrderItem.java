@@ -9,8 +9,8 @@ public class OrderItem {
     private String productID;
     private int price;
     private int quantity;
-    private Map<String, Integer> requireExtra;
-    private Map<String, Integer> optionalExtra;
+    private Map<String, Long> requireExtra;
+    private Map<String, Long> optionalExtra;
     private int totalPrice;
     private String description;
     private String name;
@@ -36,19 +36,19 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
-    public Map<String, Integer> getRequireExtra() {
+    public Map<String, Long> getRequireExtra() {
         return requireExtra;
     }
 
-    public void setRequireExtra(Map<String, Integer> requireExtra) {
+    public void setRequireExtra(Map<String, Long> requireExtra) {
         this.requireExtra = requireExtra;
     }
 
-    public Map<String, Integer> getOptionalExtra() {
+    public Map<String, Long> getOptionalExtra() {
         return optionalExtra;
     }
 
-    public void setOptionalExtra(Map<String, Integer> optionalExtra) {
+    public void setOptionalExtra(Map<String, Long> optionalExtra) {
         this.optionalExtra = optionalExtra;
     }
 
@@ -62,10 +62,10 @@ public class OrderItem {
 
     public int getTotalPrice() {
         int total = price;
-        for (Map.Entry<String, Integer> item : requireExtra.entrySet()) {
+        for (Map.Entry<String, Long> item : requireExtra.entrySet()) {
             total += item.getValue();
         }
-        for (Map.Entry<String, Integer> item : optionalExtra.entrySet()) {
+        for (Map.Entry<String, Long> item : optionalExtra.entrySet()) {
             total += item.getValue();
         }
         return total * quantity;

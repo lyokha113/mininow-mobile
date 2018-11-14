@@ -24,12 +24,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class OngoingFragment extends Fragment {
 
-    private LinearLayout ongoingFragment;
     private SharedPreferences sharedPreferences;
     private List<Order> orders;
     private RecyclerView listStore;
     private OrderRecycleAdapter adapter;
-    private ProgressBar spinner;
 
     public OngoingFragment() {
         // Required empty public constructor
@@ -45,22 +43,16 @@ public class OngoingFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        ongoingFragment = getActivity().findViewById(R.id.ongoing_fragment);
         listStore = getActivity().findViewById(R.id.list_ongoing_order);
-        spinner = getActivity().findViewById(R.id.progress_spinner_ongoing);
         getAllTemporaryOrder();
     }
 
     private void getAllTemporaryOrder() {
-        spinner.setVisibility(View.VISIBLE);
 
         orders = new ArrayList<>();
-        OrderService.getOngoingOrder(ConstantManager.customerID, data -> {
+        OrderService.getOngoingOrder(getContext(), ConstantManager.customerID, data -> {
 
             orders = (List<Order>)data;
-            spinner.setVisibility(View.GONE);
-            ongoingFragment.setBackground(null);
-
             adapter = new OrderRecycleAdapter(getActivity(), orders);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
             listStore.setLayoutManager(layoutManager);

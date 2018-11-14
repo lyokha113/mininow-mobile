@@ -7,29 +7,29 @@ import java.util.Map;
 
 public class Product implements Serializable {
 
-    private String id;
-    private String storeID;
+    private long id;
+    private Store store;
     private String name;
     private int price;
-    private String description;
     private String imgUrl;
-    private Map<String, Integer> requireExtra;
-    private Map<String, Integer> optionalExtra;
+    private String optional;
+    private String required;
+    private String description;
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getStoreID() {
-        return storeID;
+    public Store getStore() {
+        return store;
     }
 
-    public void setStoreID(String storeID) {
-        this.storeID = storeID;
+    public void setStore(Store store) {
+        this.store = store;
     }
 
     public String getName() {
@@ -48,14 +48,6 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getImgUrl() {
         return imgUrl;
     }
@@ -64,19 +56,27 @@ public class Product implements Serializable {
         this.imgUrl = imgUrl;
     }
 
-    public Map<String, Integer> getRequireExtra() {
-        return requireExtra;
+    public String getOptional() {
+        return optional;
     }
 
-    public void setRequireExtra(Map<String, Integer> requireExtra) {
-        this.requireExtra = requireExtra;
+    public void setOptional(String optional) {
+        this.optional = optional;
     }
 
-    public Map<String, Integer> getOptionalExtra() {
-        return optionalExtra;
+    public String getRequired() {
+        return required;
     }
 
-    public void setOptionalExtra(Map<String, Integer> optionalExtra) {
-        this.optionalExtra = optionalExtra;
+    public void setRequired(String required) {
+        this.required = required;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

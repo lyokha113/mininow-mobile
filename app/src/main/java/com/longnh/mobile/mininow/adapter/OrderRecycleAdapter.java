@@ -44,9 +44,9 @@ public class OrderRecycleAdapter extends RecyclerView.Adapter<OrderRecycleAdapte
     @Override
     public void onBindViewHolder(@NonNull OrderRecycleAdapter.ItemViewHolder holder, int position) {
         Order order = orders.get(position);
-        holder.name.setText(order.getStoreName());
-        holder.address.setText(order.getStoreAddress());
-        holder.quantity.setText(String.valueOf(order.getTotalPrice())+ " VND");
+        holder.name.setText(order.getStore().getName());
+        holder.address.setText(order.getStore().getAddress());
+        holder.quantity.setText(String.valueOf(order.getShipPrice() + order.getProductPrice())+ " VND");
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(activity, TrackingActivity.class);

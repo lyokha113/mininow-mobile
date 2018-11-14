@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.longnh.mobile.mininow.R;
+import com.longnh.mobile.mininow.entity.Order;
+import com.longnh.mobile.mininow.ultils.ConstantManager;
 
 import java.util.List;
 
@@ -13,11 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class OrderHistoryRecycleAdapter extends RecyclerView.Adapter<OrderHistoryRecycleAdapter.DataViewHolder> {
 
-    private List<Object> listPost;
+    private List<Order> orders;
     private Activity activity;
 
-    public OrderHistoryRecycleAdapter(Activity activity, List<Object> listPosts) {
-        this.listPost = listPosts;
+    public OrderHistoryRecycleAdapter(Activity activity, List<Order> orders) {
+        this.orders = orders;
         this.activity = activity;
     }
 
@@ -30,42 +33,43 @@ public class OrderHistoryRecycleAdapter extends RecyclerView.Adapter<OrderHistor
 
     @Override
     public void onBindViewHolder(OrderHistoryRecycleAdapter.DataViewHolder holder, int position) {
-
-        holder.setItemClickListener(new ItemClickListener() {
-            @Override
-            public void onClick(View view, int position, boolean isLongClick) {
+            Order order = orders.get(position);
+            holder.name.setText(order.getStore().getName());
+            holder.address.setText(order.getStore().getAddress());
+            holder.orderId.setText(order.getId() + "");
+            holder.orderTime.setText(order.getOrderTime().toString());
+            holder.finishedTime.setText(order.getFinishedTime() != null ? order.getFinishedTime().toString() : "");
+            holder.total.setText((order.getProductPrice() + order.getShipPrice()) + " VND");
+            if (order.getStatus() == ConstantManager.ORDER_DONE) {
+                holder.status.setText("Hoàn thành");
+            } else if (order.getStatus() == ConstantManager.ORDER_FAILED) {
+                holder.status.setText("Giao thất bại");
+            } else if ((order.getStatus() == ConstantManager.ORDER_REJECTED)) {
+                holder.status.setText("Huỷ");
             }
-        });
+
     }
 
     @Override
     public int getItemCount() {
-        return listPost == null ? 0 : listPost.size();
+        return orders == null ? 0 : orders.size();
     }
 
 
-    public class DataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class DataViewHolder extends RecyclerView.ViewHolder {
 
-        private ItemClickListener itemClickListener;
-
-        public void setItemClickListener(ItemClickListener itemClickListener) {
-            this.itemClickListener = itemClickListener;
-        }
+        private TextView name, address, orderId, orderTime, finishedTime, total, status;
 
         public DataViewHolder(final View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            itemClickListener.onClick(v, getAdapterPosition(), false);
+            name = itemView.findViewById(R.id.store_name);
+            address = itemView.findViewById(R.id.store_address);
+            orderId = itemView.findViewById(R.id.order_id);
+            orderTime = itemView.findViewById(R.id.order_time);
+            finishedTime = itemView.findViewById(R.id.finished_time);
+            total = itemView.findViewById(R.id.total);
+            status = itemView.findViewById(R.id.status);
         }
     }
-
-    public interface ItemClickListener {
-        void onClick(View view, int position, boolean isLongClick);
-    }
-
 }
 

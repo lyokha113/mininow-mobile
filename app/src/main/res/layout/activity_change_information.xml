@@ -32,8 +32,6 @@
                     android:layout_height="0dp"
                     android:layout_weight="20"
                     android:textColor="@color/colorWhite"
-                    android:text="Đổi thông tin"
-                    android:drawableLeft="@drawable/arrow_left"
                     android:textSize="20sp"
                     android:gravity="center_vertical"/>
 
@@ -54,7 +52,6 @@
                     android:layout_height="0dp"
                     android:layout_weight="30"
                     android:textColor="@color/colorBlack"
-                    android:text="Mèo Mập Ku Te"
                     android:gravity="center|bottom"
                     android:textSize="22sp"
                     android:layout_marginBottom="20dp"/>

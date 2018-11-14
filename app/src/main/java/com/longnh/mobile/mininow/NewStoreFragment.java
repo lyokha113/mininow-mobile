@@ -69,7 +69,7 @@ public class NewStoreFragment extends Fragment {
 
     private void getStores() {
         spinner.setVisibility(View.VISIBLE);
-        StoreService.getNewStores(data -> {
+        StoreService.getNewStore(getContext(), data -> {
             stores = (List<Store>) data;
             adapter = new StoreRecycleAdapter(getActivity(), stores);
             setStoreList();

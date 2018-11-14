@@ -60,6 +60,8 @@ public class CartActivity extends AppCompatActivity {
                 orderItems.setHasFixedSize(true);
                 orderItems.setAdapter(adapter);
 
+                total.setText("0 VND");
+
                 dialog.dismiss();
 
             });

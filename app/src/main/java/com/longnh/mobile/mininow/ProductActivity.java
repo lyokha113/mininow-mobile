@@ -21,6 +21,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.longnh.mobile.mininow.adapter.ProductGridAdapter;
 import com.longnh.mobile.mininow.entity.OrderItem;
 import com.longnh.mobile.mininow.entity.Product;
@@ -32,7 +33,10 @@ import com.longnh.mobile.mininow.ultils.JsonUtil;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +46,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 public class ProductActivity extends AppCompatActivity {
-
-
 
     private GridView gridProducts;
     private LinearLayout storeImg, viewCart;
@@ -82,7 +84,11 @@ public class ProductActivity extends AppCompatActivity {
 
     private void addEvents() {
         gridProducts.setOnItemClickListener((parent, view, position, id) -> {
-            orderProduct(products.get(position));
+            try {
+                orderProduct(products.get(position));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
         confirmCart.setOnClickListener(v -> {
@@ -106,7 +112,7 @@ public class ProductActivity extends AppCompatActivity {
     private void getProduct() {
         products = new ArrayList<>();
 
-        ProductService.getProductOfStore(storeID, data -> {
+        ProductService.getProductOfStore(getApplicationContext(), storeID, data -> {
             products = (List<Product>) data;
             gridProducts.setAdapter(new ProductGridAdapter(this, products));
         });
@@ -114,11 +120,11 @@ public class ProductActivity extends AppCompatActivity {
 
     private void getStoreInfo() {
 
-        StoreService.getStoreInfo(storeID, data -> {
+        StoreService.getStoreInfo(getApplicationContext(), storeID, data -> {
             Store store = (Store) data;
             storeName.setText(store.getName());
             storeAddress.setText(store.getAddress() + " - " + store.getPhone());
-            Picasso.get().load(store.getBannerUrl()).into(new Target() {
+            Picasso.get().load(store.getBannerURL()).into(new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     storeImg.setBackground(new BitmapDrawable(bitmap));
@@ -136,11 +142,11 @@ public class ProductActivity extends AppCompatActivity {
         });
     }
 
-    public void orderProduct(Product product) {
+    public void orderProduct(Product product) throws IOException {
 
         orderItem = new OrderItem();
         orderItem.setPrice(product.getPrice());
-        orderItem.setProductID(product.getId());
+        orderItem.setProductID(product.getId() + "");
         orderItem.setName(product.getName());
 
         Dialog detail = new Dialog(this, R.style.MaterialDialogSheet);
@@ -155,24 +161,23 @@ public class ProductActivity extends AppCompatActivity {
         TextView price = detail.findViewById(R.id.product_detail_price);
         price.setText(product.getPrice() + " VND");
 
-        Map<String, Integer> requires = product.getRequireExtra();
-        Map<String, Integer> optionals = product.getOptionalExtra();
+        ObjectMapper om = new ObjectMapper();
 
         TextView total = detail.findViewById(R.id.totalPrice);
-
         LinearLayout extraView = detail.findViewById(R.id.extras_info);
 
-        if (requires != null) {
+        if (product.getRequired() != null) {
+            List<String> requires = Arrays.asList(om.readValue(product.getRequired(), String[].class));
             LinearLayout parent = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.radio_required, extraView, false);
             RadioGroup items = parent.findViewById(R.id.require_item);
             LinearLayout values = parent.findViewById(R.id.require_value);
             extraView.addView(parent);
 
             boolean isFirst = true;
-            for (Map.Entry<String, Integer> require : requires.entrySet()) {
+            for (String require : requires) {
 
-                String itemName = require.getKey();
-                Integer itemPrice = require.getValue();
+                String itemName = require.split(" - ")[0];
+                Long itemPrice = Long.parseLong(require.split(" - ")[1]);
 
                 RadioButton item = (RadioButton) LayoutInflater.from(this).inflate(R.layout.radio_item, items, false);
                 item.setText(itemName);
@@ -196,16 +201,17 @@ public class ProductActivity extends AppCompatActivity {
             }
         }
 
-        if (optionals != null) {
+        if (product.getOptional() != null) {
+            List<String> optionals = Arrays.asList(om.readValue(product.getOptional(), String[].class));
             LinearLayout parent = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.checkbox_extra, extraView, false);
             LinearLayout items = parent.findViewById(R.id.option_item);
             LinearLayout values = parent.findViewById(R.id.option_value);
             extraView.addView(parent);
 
-            for (Map.Entry<String, Integer> optional : optionals.entrySet()) {
+            for (String optional : optionals) {
 
-                String itemName = optional.getKey();
-                Integer itemPrice = optional.getValue();
+                String itemName = optional.split(" - ")[0];
+                Long itemPrice = Long.parseLong(optional.split(" - ")[1]);
 
                 CheckBox item = (CheckBox) LayoutInflater.from(this).inflate(R.layout.checkbox_item, items, false);
                 item.setText(itemName);

@@ -1,113 +1,92 @@
 package com.longnh.mobile.mininow.entity;
 
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Order {
 
-    private String id;
-    private String storeName;
-    private String storeAddress;
-    private String storeID;
-    private String cusName;
-    private String cusAddress;
-    private String cusPhone;
-    private String cusID;
-    private String shipperID;
-    private int totalPrice;
-    private Date expectedTime;
-    private Date finishedTime;
+    private long id;
+    private Store store;
+    private Customer customer;
+    private Shipper shipper;
+    private long productPrice;
+    private long shipPrice;
+    private LocalDateTime orderTime;
+    private LocalDateTime expectedTime;
+    private LocalDateTime finishedTime;
     private String description;
     private int status;
     private String detail;
-    private int shipPrice;
 
-
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getCusID() {
-        return cusID;
+    public Store getStore() {
+        return store;
     }
 
-    public void setCusID(String cusID) {
-        this.cusID = cusID;
+    public void setStore(Store store) {
+        this.store = store;
     }
 
-    public String getStoreID() {
-        return storeID;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setStoreID(String storeID) {
-        this.storeID = storeID;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public String getDetail() {
-        return detail;
+    public Shipper getShipper() {
+        return shipper;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public void setShipper(Shipper shipper) {
+        this.shipper = shipper;
     }
 
-    public String getCusName() {
-        return cusName;
+    public long getProductPrice() {
+        return productPrice;
     }
 
-    public void setCusName(String cusName) {
-        this.cusName = cusName;
+    public void setProductPrice(long productPrice) {
+        this.productPrice = productPrice;
     }
 
-    public String getCusAddress() {
-        return cusAddress;
+    public long getShipPrice() {
+        return shipPrice;
     }
 
-    public void setCusAddress(String cusAddress) {
-        this.cusAddress = cusAddress;
+    public void setShipPrice(long shipPrice) {
+        this.shipPrice = shipPrice;
     }
 
-    public String getCusPhone() {
-        return cusPhone;
+    public LocalDateTime getOrderTime() {
+        return orderTime;
     }
 
-    public void setCusPhone(String cusPhone) {
-        this.cusPhone = cusPhone;
+    public void setOrderTime(LocalDateTime orderTime) {
+        this.orderTime = orderTime;
     }
 
-    public String getShipperID() {
-        return shipperID;
-    }
-
-    public void setShipperID(String shipperID) {
-        this.shipperID = shipperID;
-    }
-
-    public int getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(int totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public Date getExpectedTime() {
+    public LocalDateTime getExpectedTime() {
         return expectedTime;
     }
 
-    public void setExpectedTime(Date expectedTime) {
+    public void setExpectedTime(LocalDateTime expectedTime) {
         this.expectedTime = expectedTime;
     }
 
-    public Date getFinishedTime() {
+    public LocalDateTime getFinishedTime() {
         return finishedTime;
     }
 
-    public void setFinishedTime(Date finishedTime) {
+    public void setFinishedTime(LocalDateTime finishedTime) {
         this.finishedTime = finishedTime;
     }
 
@@ -119,35 +98,19 @@ public class Order {
         this.description = description;
     }
 
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
     public int getStatus() {
         return status;
     }
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public String getStoreName() {
-        return storeName;
-    }
-
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
-    }
-
-    public String getStoreAddress() {
-        return storeAddress;
-    }
-
-    public void setStoreAddress(String storeAddress) {
-        this.storeAddress = storeAddress;
-    }
-
-    public int getShipPrice() {
-        return shipPrice;
-    }
-
-    public void setShipPrice(int shipPrice) {
-        this.shipPrice = shipPrice;
     }
 }

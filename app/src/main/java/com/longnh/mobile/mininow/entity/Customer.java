@@ -2,17 +2,17 @@ package com.longnh.mobile.mininow.entity;
 
 public class Customer {
 
-    private String id;
+    private long id;
     private String address;
     private String name;
     private String phone;
-    private String imgUrl;
+    private String imgURL;
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -40,11 +40,11 @@ public class Customer {
         this.phone = phone;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getImgURL() {
+        return imgURL;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
     }
 }

@@ -4,12 +4,13 @@ import com.longnh.mobile.mininow.entity.Customer;
 
 public class ConstantManager {
 
-    public static final String customerID = "CU-1";
-    public static final String shipperID = "SP-1";
+    public static final long customerID = 1;
+    public static final String shipperID = "1";
     public static final String ORDER_TEMPORARY = "order_temporary";
     public static final String STORE_ADDRESS = "store_address";
     public static final String STORE_ID = "store_id";
     public static final String STORE_NAME = "store_name";
+    public static final String HOST = "http://192.168.43.24:8000/api";
     public static final int ORDER_WAITING = 1;
     public static final int ORDER_APPROVE = 2;
     public static final int ORDER_ACCEPTED = 3;

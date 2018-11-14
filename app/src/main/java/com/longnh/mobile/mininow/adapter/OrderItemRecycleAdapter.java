@@ -39,16 +39,16 @@ public class OrderItemRecycleAdapter extends RecyclerView.Adapter<OrderItemRecyc
         holder.price.setText(String.valueOf(orderItem.getTotalPrice()) + " VND");
 
         String extra = "";
-        Map<String, Integer> require = orderItem.getRequireExtra();
+        Map<String, Long> require = orderItem.getRequireExtra();
         if (require != null) {
-            for (Map.Entry<String, Integer> item : require.entrySet()) {
+            for (Map.Entry<String, Long> item : require.entrySet()) {
                 extra += item.getKey() + "\n";
             }
         }
 
-        Map<String, Integer> optional = orderItem.getOptionalExtra();
+        Map<String, Long> optional = orderItem.getOptionalExtra();
         if (optional != null) {
-            for (Map.Entry<String, Integer> item : optional.entrySet()) {
+            for (Map.Entry<String, Long> item : optional.entrySet()) {
                 extra += item.getKey() + "\n";
             }
         }

@@ -84,7 +84,7 @@ public class DraftFragment extends Fragment {
 
         Set<String> keys = sharedPreferences.getAll().keySet();
         stores = new ArrayList<>();
-        StoreService.getAll(data -> {
+        StoreService.getAll(getContext(), data -> {
 
             List<Store> rs = (List<Store>) data;
             for (String key : keys) {

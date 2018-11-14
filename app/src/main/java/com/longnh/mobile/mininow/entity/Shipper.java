@@ -6,7 +6,7 @@ public class Shipper {
     private String address;
     private String name;
     private String phone;
-    private String imgUrl;
+    private String imgURL;
 
     public String getId() {
         return id;
@@ -40,12 +40,11 @@ public class Shipper {
         this.phone = phone;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getImgURL() {
+        return imgURL;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
     }
-
 }

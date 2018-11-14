@@ -1,13 +1,7 @@
 package com.longnh.mobile.mininow.entity;
 
-import android.os.Parcel;
-
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.GeoPoint;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 public class Store implements Serializable {
 
@@ -17,10 +11,11 @@ public class Store implements Serializable {
     private String phone;
     private String email;
     private String description;
-    private String imgUrl;
-    private String bannerUrl;
-    private Timestamp registerTime;
-    private GeoPoint location;
+    private String imgURL;
+    private String bannerURL;
+    private LocalDateTime registerTime;
+    private Double latitude;
+    private Double longitude;
     private String distance;
 
     public String getId() {
@@ -71,19 +66,11 @@ public class Store implements Serializable {
         this.description = description;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
-
-    public Timestamp getRegisterTime() {
+    public LocalDateTime getRegisterTime() {
         return registerTime;
     }
 
-    public void setRegisterTime(Timestamp registerTime) {
+    public void setRegisterTime(LocalDateTime registerTime) {
         this.registerTime = registerTime;
     }
 
@@ -95,19 +82,35 @@ public class Store implements Serializable {
         this.distance = distance;
     }
 
-    public GeoPoint getLocation() {
-        return location;
+    public Double getLatitude() {
+        return latitude;
     }
 
-    public void setLocation(GeoPoint location) {
-        this.location = location;
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
     }
 
-    public String getBannerUrl() {
-        return bannerUrl;
+    public Double getLongitude() {
+        return longitude;
     }
 
-    public void setBannerUrl(String bannerUrl) {
-        this.bannerUrl = bannerUrl;
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getImgURL() {
+        return imgURL;
+    }
+
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
+    }
+
+    public String getBannerURL() {
+        return bannerURL;
+    }
+
+    public void setBannerURL(String bannerURL) {
+        this.bannerURL = bannerURL;
     }
 }

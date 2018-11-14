@@ -40,7 +40,7 @@ public class AccountFragment extends Fragment {
         super.onStart();
 
         changeInfo = getActivity().findViewById(R.id.change_info);
-        changePass = getActivity().findViewById(R.id.change_password);
+//        changePass = getActivity().findViewById(R.id.change_password);
         cusName = getActivity().findViewById(R.id.custom_name_info);
         cusImg = getActivity().findViewById(R.id.custom_img_info);
 
@@ -49,12 +49,12 @@ public class AccountFragment extends Fragment {
             startActivity(intent);
         });
 
-        changePass.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), DMKActivity.class);
-            startActivity(intent);
-        });
+//        changePass.setOnClickListener(v -> {
+//            Intent intent = new Intent(getActivity(), DMKActivity.class);
+//            startActivity(intent);
+//        });
 
         cusName.setText(ConstantManager.customer.getName());
-        Picasso.get().load(ConstantManager.customer.getImgUrl()).into(cusImg);
+        Picasso.get().load(ConstantManager.customer.getImgURL()).into(cusImg);
     }
 }

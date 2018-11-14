@@ -20,13 +20,15 @@ import com.longnh.mobile.mininow.adapter.OrderItemRecycleAdapter;
 import com.longnh.mobile.mininow.entity.Customer;
 import com.longnh.mobile.mininow.entity.Order;
 import com.longnh.mobile.mininow.entity.OrderItem;
-import com.longnh.mobile.mininow.model.APIManager;
+import com.longnh.mobile.mininow.entity.Store;
 import com.longnh.mobile.mininow.model.OrderService;
+import com.longnh.mobile.mininow.model.StoreService;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.JsonUtil;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
+import org.json.JSONException;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -133,39 +135,52 @@ public class OrderConfirmActivity extends AppCompatActivity {
         });
 
         submitOrder.setOnClickListener(v -> {
+
+            Customer customer = new Customer();
+            customer.setId(ConstantManager.customerID);
+            customer.setAddress(customerAddress.getText().toString());
+            customer.setName(customerName.getText().toString());
+            customer.setPhone(customerPhone.getText().toString());
+
             Order order = new Order();
-            order.setCusID(ConstantManager.customerID);
-            order.setCusAddress(customerAddress.getText().toString());
-            order.setCusName(customerName.getText().toString());
-            order.setCusPhone(customerPhone.getText().toString());
+            order.setCustomer(customer);
             order.setDescription(description.getText().toString());
+            order.setOrderTime(LocalDateTime.now());
             try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm, dd/MM/yyyy");
-                Date parsedDate = dateFormat.parse(orderTime.getText().toString());
-                order.setExpectedTime(parsedDate);
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+                order.setExpectedTime(LocalDateTime.parse(orderTime.getText().toString(), dtf));
             } catch (Exception e) {
                 return;
             }
 
-            order.setTotalPrice(totalorderPriceVal);
-            order.setStoreID(storeID);
+            Store store = new Store();
+            store.setId(storeID);
+            store.setName(storeName);
+            store.setAddress(storeAddress);
+
+            order.setStore(store);
             order.setStatus(ConstantManager.ORDER_WAITING);
             order.setDetail(JsonUtil.getJson(orderItemList));
-            order.setStoreName(storeName);
-            order.setStoreAddress(storeAddress);
             order.setShipPrice(shipPriceVal);
 
-            String id = OrderService.createOrder(order);
+            try {
+                OrderService.createOrder(getApplicationContext(), order, data -> {
+                    Order result = (Order) data;
+                    SharedPreferences sharedPreferences = getApplication().getApplicationContext().getSharedPreferences(ConstantManager.ORDER_TEMPORARY, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor edit = sharedPreferences.edit();
+                    edit.remove(storeID);
+                    edit.apply();
 
-            SharedPreferences sharedPreferences = getApplication().getApplicationContext().getSharedPreferences(ConstantManager.ORDER_TEMPORARY, Context.MODE_PRIVATE);
-            SharedPreferences.Editor edit = sharedPreferences.edit();
-            edit.remove(storeID);
-            edit.apply();
+                    Intent intent = new Intent(getApplicationContext(), TrackingActivity.class);
+                    intent.putExtra("orderID", result.getId());
+                    startActivity(intent);
+                    finish();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            Intent intent = new Intent(getApplicationContext(), TrackingActivity.class);
-            intent.putExtra("orderID", id);
-            startActivity(intent);
-            finish();
+
         });
     }
 
@@ -179,7 +194,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         customerAddress.setText(customer.getAddress());
         customerName.setText(customer.getName());
         customerPhone.setText(customer.getPhone());
-        Picasso.get().load(customer.getImgUrl()).into(customerImg);
+        Picasso.get().load(customer.getImgURL()).into(customerImg);
     }
 
     private void setListProductItems() {
@@ -205,7 +220,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
     }
 
     private void setShipInfo() {
-        APIManager.getCustomerAndStoreDistance(this, desAddress, storeAddress, data -> {
+        StoreService.getCustomerAndStoreDistance(this, desAddress, storeAddress, data -> {
             String distance = String.valueOf(data);
             if (!distance.equals("Not found")) {
                 shipDistance.setText(distance);
