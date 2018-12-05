@@ -1,11 +1,9 @@
 package com.longnh.mobile.mininow;
 
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,10 +15,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.firestore.GeoPoint;
-import com.longnh.mobile.mininow.entity.Order;
-import com.longnh.mobile.mininow.model.OrderService;
-import com.longnh.mobile.mininow.model.ShipperService;
+import com.longnh.mobile.mininow.model.Order;
+import com.longnh.mobile.mininow.service.OrderService;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.LocationUtils;
 
@@ -105,9 +101,10 @@ public class TrackingActivity extends AppCompatActivity {
         gmap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         gmap.getUiSettings().setZoomControlsEnabled(true);
 
-        Location location = LocationUtils.getLastKnownLocation(this, locationListener);
-        setMap(new LatLng(location.getLatitude(), location.getLongitude()));
-        setMarker(new LatLng(location.getLatitude(), location.getLongitude()), "Vị trí của bạn", true);
+//        Location loc =  LocationUtils.getLastKnownLocation(this, locationListener);
+//        LatLng location = new LatLng(loc.getLatitude(), loc.getLongitude());
+//        setMap(location);
+//        setMarker(location, "Vị trí của bạn", true);
 
 //        trackingOrder();
 

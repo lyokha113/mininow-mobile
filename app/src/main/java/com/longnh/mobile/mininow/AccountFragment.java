@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.longnh.mobile.mininow.ultils.ConstantManager;
+import com.google.firebase.auth.FirebaseAuth;
+import com.longnh.mobile.mininow.model.Customer;
+import com.longnh.mobile.mininow.ultils.UserSession;
 import com.squareup.picasso.Picasso;
 
 import androidx.fragment.app.Fragment;
@@ -20,8 +22,10 @@ import androidx.fragment.app.Fragment;
  */
 public class AccountFragment extends Fragment {
 
-    private TextView changeInfo, changePass, cusName;
+    private TextView changeInfo, changePass, cusName, logout;
     private ImageView cusImg;
+    private  UserSession session;
+    private Customer current;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -43,6 +47,10 @@ public class AccountFragment extends Fragment {
 //        changePass = getActivity().findViewById(R.id.change_password);
         cusName = getActivity().findViewById(R.id.custom_name_info);
         cusImg = getActivity().findViewById(R.id.custom_img_info);
+        logout = getActivity().findViewById(R.id.logout);
+
+        session = new UserSession(getContext(), UserSession.UserSessionType.CUSTOMER);
+        current = session.getCustomerDetails();
 
         changeInfo.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), ChangeInformationActivity.class);
@@ -54,7 +62,13 @@ public class AccountFragment extends Fragment {
 //            startActivity(intent);
 //        });
 
-        cusName.setText(ConstantManager.customer.getName());
-        Picasso.get().load(ConstantManager.customer.getImgURL()).into(cusImg);
+        logout.setOnClickListener(v -> {
+            session.removeCustomerSession();
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            auth.signOut();
+        });
+
+        cusName.setText(current.getName());
+        Picasso.get().load(current.getImgURL()).into(cusImg);
     }
 }

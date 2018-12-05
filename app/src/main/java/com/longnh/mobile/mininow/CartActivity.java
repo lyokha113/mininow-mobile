@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.longnh.mobile.mininow.adapter.CartItemRecycleAdapter;
-import com.longnh.mobile.mininow.entity.OrderItem;
+import com.longnh.mobile.mininow.model.OrderItem;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.JsonUtil;
 

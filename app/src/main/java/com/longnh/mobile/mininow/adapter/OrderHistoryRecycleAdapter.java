@@ -1,13 +1,15 @@
 package com.longnh.mobile.mininow.adapter;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.collection.LLRBNode;
 import com.longnh.mobile.mininow.R;
-import com.longnh.mobile.mininow.entity.Order;
+import com.longnh.mobile.mininow.model.Order;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 
 import java.util.List;
@@ -44,8 +46,10 @@ public class OrderHistoryRecycleAdapter extends RecyclerView.Adapter<OrderHistor
                 holder.status.setText("Hoàn thành");
             } else if (order.getStatus() == ConstantManager.ORDER_FAILED) {
                 holder.status.setText("Giao thất bại");
+                holder.status.setTextColor(Color.RED);
             } else if ((order.getStatus() == ConstantManager.ORDER_REJECTED)) {
-                holder.status.setText("Huỷ");
+                holder.status.setText("Đã huỷ");
+                holder.status.setTextColor(Color.RED);
             }
 
     }

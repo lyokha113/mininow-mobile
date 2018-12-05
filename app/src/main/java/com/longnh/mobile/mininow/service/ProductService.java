@@ -1,4 +1,4 @@
-package com.longnh.mobile.mininow.model;
+package com.longnh.mobile.mininow.service;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,13 +10,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.longnh.mobile.mininow.entity.Product;
-import com.longnh.mobile.mininow.entity.Store;
+import com.longnh.mobile.mininow.model.Order;
+import com.longnh.mobile.mininow.model.ProductExtra;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,6 +21,7 @@ public class ProductService {
 
     static final String TAG = "ProductService";
     static final ObjectMapper om = new ObjectMapper();
+    static final String PRODUCT_URL_API = ConstantManager.HOST + "/product/";
 
     static {
         om.registerModule(new ParameterNamesModule())
@@ -31,9 +29,9 @@ public class ProductService {
                 .registerModule(new JavaTimeModule());
     }
 
-    public static void getProductOfStore(Context context, String storeID, final FirestoreCallback callback) {
+    public static void getProductExtra(Context context, long productId, final FirestoreCallback callback) {
 
-        final String URL = ConstantManager.HOST + "/store/" + storeID + "/product/";
+        final String URL = PRODUCT_URL_API  + productId + "/extra";
         RequestQueue requestQueue = VolleyManager.getInstance(context).getRequestQueue();
 
         StringRequest objectRequest = new StringRequest(
@@ -41,8 +39,8 @@ public class ProductService {
                 URL,
                 response -> {
                     try {
-                        List<Product> products = Arrays.asList(om.readValue(response, Product[].class));
-                        callback.onSuccess(products);
+                        List<ProductExtra> orders = Arrays.asList(om.readValue(response, ProductExtra[].class));
+                        callback.onSuccess(orders);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         Log.e(TAG, "onResponse: " + ex.getMessage());
@@ -51,5 +49,7 @@ public class ProductService {
                 error -> Log.e(TAG, "onErrorResponse: " + error.toString())
         );
         requestQueue.add(objectRequest);
+
     }
+
 }

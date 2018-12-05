@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.longnh.mobile.mininow.ProductActivity;
 import com.longnh.mobile.mininow.R;
-import com.longnh.mobile.mininow.entity.Store;
+import com.longnh.mobile.mininow.model.Store;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class StoreRecycleAdapter extends RecyclerView.Adapter<StoreRecycleAdapte
     private List<Store> stores;
     private Activity activity;
 
-    public StoreRecycleAdapter(Activity activity, List<Store> stores) {
+    public  StoreRecycleAdapter(Activity activity, List<Store> stores) {
         this.stores = stores;
         this.activity = activity;
     }
@@ -55,7 +55,7 @@ public class StoreRecycleAdapter extends RecyclerView.Adapter<StoreRecycleAdapte
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(activity, ProductActivity.class);
-            intent.putExtra("storeID", stores.get(position).getId());
+            intent.putExtra("storeID", store.getId());
             activity.startActivity(intent);
         });
     }

@@ -1,4 +1,4 @@
-package com.longnh.mobile.mininow.model;
+package com.longnh.mobile.mininow.service;
 
 import android.content.Context;
 import android.util.Log;
@@ -15,7 +15,7 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.longnh.mobile.mininow.entity.Order;
+import com.longnh.mobile.mininow.model.Order;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 
 import org.json.JSONException;
@@ -29,6 +29,7 @@ public class OrderService {
 
     static final String TAG = "OrderService";
     static final ObjectMapper om = new ObjectMapper();
+    static final String ORDER_URL_API = ConstantManager.HOST + "/order/";
     private final static FirebaseFirestore db = FirestoreDB.getInstance();
 
     static {
@@ -39,9 +40,9 @@ public class OrderService {
         om.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
-    public static void createOrder(Context context, Order order, final VolleyCallback callback) throws JSONException, IOException {
+    public static void createOrder(Context context, Order order, String detail, final VolleyCallback callback) throws JSONException, IOException {
 
-        final String URL = ConstantManager.HOST + "/order/";
+        final String URL = ORDER_URL_API;
         RequestQueue requestQueue = VolleyManager.getInstance(context).getRequestQueue();
 
         JSONObject storeJS = new JSONObject();
@@ -64,11 +65,15 @@ public class OrderService {
         orderRequest.put("expectedTime", order.getExpectedTime());
         orderRequest.put("description", order.getDescription());
         orderRequest.put("status", order.getStatus());
-        orderRequest.put("detail", order.getDetail());
+
+        JSONObject request = new JSONObject();
+        request.put("detail", detail);
+        request.put("order", orderRequest);
+
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 URL,
-                orderRequest,
+                request,
                 response -> {
                     try {
                         Order result = om.readValue(response.toString(), Order.class);
@@ -85,7 +90,7 @@ public class OrderService {
 
     public static void getOrderInfo(Context context, long orderID, final FirestoreCallback callback) {
 
-        final String URL = ConstantManager.HOST + "/order/" + orderID;
+        final String URL = ORDER_URL_API + orderID;
         RequestQueue requestQueue = VolleyManager.getInstance(context).getRequestQueue();
 
         StringRequest objectRequest = new StringRequest(
@@ -107,7 +112,7 @@ public class OrderService {
 
     public static void getOngoingOrder(Context context, long customerID, final FirestoreCallback callback) {
 
-        final String URL = ConstantManager.HOST + "/order/ongoing/" + customerID;
+        final String URL = ORDER_URL_API + "/ongoing/" + customerID;
         RequestQueue requestQueue = VolleyManager.getInstance(context).getRequestQueue();
 
         StringRequest objectRequest = new StringRequest(
@@ -130,7 +135,7 @@ public class OrderService {
 
     public static void getFinishedOrder(Context context, long customerID, final FirestoreCallback callback) {
 
-        final String URL = ConstantManager.HOST + "/order/finished/" + customerID;
+        final String URL = ORDER_URL_API + "/finished/" + customerID;
         RequestQueue requestQueue = VolleyManager.getInstance(context).getRequestQueue();
 
         StringRequest objectRequest = new StringRequest(
@@ -176,13 +181,14 @@ public class OrderService {
 
     public static void cancleOrder(Context context, long id, int status, final FirestoreCallback callback) {
 
-        final String URL = ConstantManager.HOST + "/order/" + id + "/status/" + status;
+        final String URL = ORDER_URL_API + id + "/status/" + status;
         RequestQueue requestQueue = VolleyManager.getInstance(context).getRequestQueue();
 
         StringRequest objectRequest = new StringRequest(
                 Request.Method.GET,
                 URL,
-                response -> {},
+                response -> {
+                },
                 error -> Log.e(TAG, "onErrorResponse: " + error.toString())
         );
         requestQueue.add(objectRequest);

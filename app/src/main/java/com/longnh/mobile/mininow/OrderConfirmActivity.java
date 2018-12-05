@@ -1,5 +1,6 @@
 package com.longnh.mobile.mininow;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,17 +18,16 @@ import android.widget.Toast;
 
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.longnh.mobile.mininow.adapter.OrderItemRecycleAdapter;
-import com.longnh.mobile.mininow.entity.Customer;
-import com.longnh.mobile.mininow.entity.Order;
-import com.longnh.mobile.mininow.entity.OrderItem;
-import com.longnh.mobile.mininow.entity.Store;
-import com.longnh.mobile.mininow.model.OrderService;
-import com.longnh.mobile.mininow.model.StoreService;
+import com.longnh.mobile.mininow.model.Customer;
+import com.longnh.mobile.mininow.model.Order;
+import com.longnh.mobile.mininow.model.OrderItem;
+import com.longnh.mobile.mininow.model.Store;
+import com.longnh.mobile.mininow.service.OrderService;
+import com.longnh.mobile.mininow.service.StoreService;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.JsonUtil;
+import com.longnh.mobile.mininow.ultils.UserSession;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -54,11 +54,14 @@ public class OrderConfirmActivity extends AppCompatActivity {
     private Button submitOrder;
     private int orderPriceVal, shipPriceVal, totalorderPriceVal;
     private String storeID, storeAddress, storeName, desAddress;
+    private Customer current;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
+        UserSession session = new UserSession(getApplicationContext(), UserSession.UserSessionType.CUSTOMER);
+        current = session.getCustomerDetails();
 
         addControls();
         addEvents();
@@ -70,7 +73,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         storeAddress = storeIntent.getStringExtra(ConstantManager.STORE_ADDRESS);
         storeName = storeIntent.getStringExtra(ConstantManager.STORE_NAME);
 
-        desAddress = ConstantManager.customer.getAddress();
+        desAddress = current.getAddress();
 
         setCustomerInfo();
         setListProductItems();
@@ -137,7 +140,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         submitOrder.setOnClickListener(v -> {
 
             Customer customer = new Customer();
-            customer.setId(ConstantManager.customerID);
+            customer.setId(current.getId());
             customer.setAddress(customerAddress.getText().toString());
             customer.setName(customerName.getText().toString());
             customer.setPhone(customerPhone.getText().toString());
@@ -154,17 +157,21 @@ public class OrderConfirmActivity extends AppCompatActivity {
             }
 
             Store store = new Store();
-            store.setId(storeID);
+            store.setId(Long.parseLong(storeID));
             store.setName(storeName);
             store.setAddress(storeAddress);
 
             order.setStore(store);
             order.setStatus(ConstantManager.ORDER_WAITING);
-            order.setDetail(JsonUtil.getJson(orderItemList));
             order.setShipPrice(shipPriceVal);
+            order.setProductPrice(orderPriceVal);
 
             try {
-                OrderService.createOrder(getApplicationContext(), order, data -> {
+                ProgressDialog progressDialog = new ProgressDialog(this);
+                progressDialog.setMessage("Đang xử lý ...");
+                progressDialog.setIndeterminate(true);
+                progressDialog.show();
+                OrderService.createOrder(getApplicationContext(), order, JsonUtil.getJson(orderItemList), data -> {
                     Order result = (Order) data;
                     SharedPreferences sharedPreferences = getApplication().getApplicationContext().getSharedPreferences(ConstantManager.ORDER_TEMPORARY, Context.MODE_PRIVATE);
                     SharedPreferences.Editor edit = sharedPreferences.edit();
@@ -175,6 +182,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
                     intent.putExtra("orderID", result.getId());
                     startActivity(intent);
                     finish();
+                    progressDialog.dismiss();
                 });
             } catch (Exception e) {
                 e.printStackTrace();
@@ -190,7 +198,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
     }
 
     private void setCustomerInfo() {
-        Customer customer = ConstantManager.customer;
+        Customer customer = current;
         customerAddress.setText(customer.getAddress());
         customerName.setText(customer.getName());
         customerPhone.setText(customer.getPhone());
@@ -220,6 +228,10 @@ public class OrderConfirmActivity extends AppCompatActivity {
     }
 
     private void setShipInfo() {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Đang xử lý ...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
         StoreService.getCustomerAndStoreDistance(this, desAddress, storeAddress, data -> {
             String distance = String.valueOf(data);
             if (!distance.equals("Not found")) {
@@ -237,6 +249,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 Toast.makeText(this, "Không thể tìm thấy địa chỉ này. Vui lòng chọn lại", Toast.LENGTH_LONG).show();
                 customerAddress.requestFocus();
             }
+            progressDialog.dismiss();
         });
     }
 

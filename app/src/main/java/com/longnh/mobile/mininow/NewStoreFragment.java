@@ -5,12 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
 import com.longnh.mobile.mininow.adapter.StoreRecycleAdapter;
-import com.longnh.mobile.mininow.entity.Store;
-import com.longnh.mobile.mininow.model.StoreService;
+import com.longnh.mobile.mininow.model.Store;
+import com.longnh.mobile.mininow.service.StoreService;
 
 import java.util.List;
 

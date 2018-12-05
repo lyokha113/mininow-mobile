@@ -21,25 +21,21 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.longnh.mobile.mininow.adapter.ProductGridAdapter;
-import com.longnh.mobile.mininow.entity.OrderItem;
-import com.longnh.mobile.mininow.entity.Product;
-import com.longnh.mobile.mininow.entity.Store;
-import com.longnh.mobile.mininow.model.ProductService;
-import com.longnh.mobile.mininow.model.StoreService;
+import com.longnh.mobile.mininow.model.OrderItem;
+import com.longnh.mobile.mininow.model.Product;
+import com.longnh.mobile.mininow.model.ProductExtra;
+import com.longnh.mobile.mininow.model.Store;
+import com.longnh.mobile.mininow.service.ProductService;
+import com.longnh.mobile.mininow.service.StoreService;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.JsonUtil;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,7 +47,7 @@ public class ProductActivity extends AppCompatActivity {
     private LinearLayout storeImg, viewCart;
     private TextView storeName, storeAddress, totalOrderPrice, confirmCart;
     private SharedPreferences sharedPreferences;
-    private String storeID;
+    private long storeID;
     private OrderItem orderItem;
     private List<Product> products;
 
@@ -60,7 +56,7 @@ public class ProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
-        storeID = getIntent().getExtras().getString("storeID");
+        storeID = getIntent().getExtras().getLong("storeID");
 
         addControls();
         addEvents();
@@ -84,17 +80,13 @@ public class ProductActivity extends AppCompatActivity {
 
     private void addEvents() {
         gridProducts.setOnItemClickListener((parent, view, position, id) -> {
-            try {
-                orderProduct(products.get(position));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            orderProduct(products.get(position));
         });
 
         confirmCart.setOnClickListener(v -> {
             if (totalOrderPrice.getText().toString().equals("0 VND")) return;
             Intent intent = new Intent(this, OrderConfirmActivity.class);
-            intent.putExtra(ConstantManager.STORE_ID, storeID);
+            intent.putExtra(ConstantManager.STORE_ID, String.valueOf(storeID));
             intent.putExtra(ConstantManager.STORE_ADDRESS, storeAddress.getText().toString());
             intent.putExtra(ConstantManager.STORE_NAME, storeName.getText().toString());
             startActivity(intent);
@@ -102,7 +94,7 @@ public class ProductActivity extends AppCompatActivity {
 
         viewCart.setOnClickListener(v -> {
             Intent intent = new Intent(this, CartActivity.class);
-            intent.putExtra(ConstantManager.STORE_ID, storeID);
+            intent.putExtra(ConstantManager.STORE_ID, String.valueOf(storeID));
             intent.putExtra(ConstantManager.STORE_ADDRESS, storeAddress.getText().toString());
             intent.putExtra(ConstantManager.STORE_NAME, storeName.getText().toString());
             startActivity(intent);
@@ -112,7 +104,7 @@ public class ProductActivity extends AppCompatActivity {
     private void getProduct() {
         products = new ArrayList<>();
 
-        ProductService.getProductOfStore(getApplicationContext(), storeID, data -> {
+        StoreService.getProductOfStore(getApplicationContext(), storeID, data -> {
             products = (List<Product>) data;
             gridProducts.setAdapter(new ProductGridAdapter(this, products));
         });
@@ -142,11 +134,11 @@ public class ProductActivity extends AppCompatActivity {
         });
     }
 
-    public void orderProduct(Product product) throws IOException {
+    public void orderProduct(Product product) {
 
         orderItem = new OrderItem();
         orderItem.setPrice(product.getPrice());
-        orderItem.setProductID(product.getId() + "");
+        orderItem.setProductID(product.getId());
         orderItem.setName(product.getName());
 
         Dialog detail = new Dialog(this, R.style.MaterialDialogSheet);
@@ -161,76 +153,20 @@ public class ProductActivity extends AppCompatActivity {
         TextView price = detail.findViewById(R.id.product_detail_price);
         price.setText(product.getPrice() + " VND");
 
-        ObjectMapper om = new ObjectMapper();
-
         TextView total = detail.findViewById(R.id.totalPrice);
         LinearLayout extraView = detail.findViewById(R.id.extras_info);
 
-        if (product.getRequired() != null) {
-            List<String> requires = Arrays.asList(om.readValue(product.getRequired(), String[].class));
-            LinearLayout parent = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.radio_required, extraView, false);
-            RadioGroup items = parent.findViewById(R.id.require_item);
-            LinearLayout values = parent.findViewById(R.id.require_value);
-            extraView.addView(parent);
-
-            boolean isFirst = true;
-            for (String require : requires) {
-
-                String itemName = require.split(" - ")[0];
-                Long itemPrice = Long.parseLong(require.split(" - ")[1]);
-
-                RadioButton item = (RadioButton) LayoutInflater.from(this).inflate(R.layout.radio_item, items, false);
-                item.setText(itemName);
-                items.addView(item);
-
-                TextView value = (TextView) LayoutInflater.from(this).inflate(R.layout.textview_value, items, false);
-                value.setText(itemPrice + " VND");
-                values.addView(value);
-
-                item.setOnClickListener(v -> {
-                    orderItem.getRequireExtra().clear();
-                    orderItem.getRequireExtra().put(itemName, itemPrice);
-                    total.setText(orderItem.getTotalPrice() + " VND");
-                });
-
-                if (isFirst) {
-                    item.performClick();
-                    isFirst= false;
-                }
-
+        ProductService.getProductExtra(getApplicationContext(), product.getId(), data -> {
+            List<ProductExtra> extras = (List<ProductExtra>) data;
+            List<ProductExtra> required = new ArrayList<>();
+            List<ProductExtra> optional = new ArrayList<>();
+            for (ProductExtra extra : extras) {
+                if (extra.isRequired()) required.add(extra);
+                else optional.add(extra);
             }
-        }
-
-        if (product.getOptional() != null) {
-            List<String> optionals = Arrays.asList(om.readValue(product.getOptional(), String[].class));
-            LinearLayout parent = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.checkbox_extra, extraView, false);
-            LinearLayout items = parent.findViewById(R.id.option_item);
-            LinearLayout values = parent.findViewById(R.id.option_value);
-            extraView.addView(parent);
-
-            for (String optional : optionals) {
-
-                String itemName = optional.split(" - ")[0];
-                Long itemPrice = Long.parseLong(optional.split(" - ")[1]);
-
-                CheckBox item = (CheckBox) LayoutInflater.from(this).inflate(R.layout.checkbox_item, items, false);
-                item.setText(itemName);
-                items.addView(item);
-
-                TextView value = (TextView) LayoutInflater.from(this).inflate(R.layout.textview_value, items, false);
-                value.setText(itemPrice + " VND");
-                values.addView(value);
-
-                item.setOnClickListener(v -> {
-                    if (item.isChecked()) {
-                        orderItem.getOptionalExtra().put(itemName, itemPrice);
-                    } else {
-                        orderItem.getOptionalExtra().remove(itemName);
-                    }
-                    total.setText(orderItem.getTotalPrice() + " VND");
-                });
-            }
-        }
+            setRequireItem(extraView, total, required);
+            setOptionalItem(extraView, total, optional);
+        });
 
         detail.findViewById(R.id.closePopup).setOnClickListener(v -> {
             detail.dismiss();
@@ -270,14 +206,13 @@ public class ProductActivity extends AppCompatActivity {
             orderItem.setDescription(description);
 
             Set<String> savedProducts = new HashSet<>(
-                    sharedPreferences.getStringSet(storeID, new HashSet<>()));
+                    sharedPreferences.getStringSet(String.valueOf(storeID), new HashSet<>()));
 
             List<String> toRemove = new ArrayList<>();
             savedProducts.forEach(ele -> {
                 OrderItem savedItem = JsonUtil.getObject(ele, OrderItem.class);
-                if (savedItem.getProductID().equals(orderItem.getProductID())
-                        && savedItem.getRequireExtra().equals(orderItem.getRequireExtra())
-                        && savedItem.getOptionalExtra().equals(orderItem.getOptionalExtra())) {
+                if (savedItem.getProductID() == orderItem.getProductID()
+                        && savedItem.getExtras().equals(orderItem.getExtras())) {
                     orderItem.setQuantity(savedItem.getQuantity() + orderItem.getQuantity());
                     toRemove.add(ele);
                 }
@@ -287,8 +222,8 @@ public class ProductActivity extends AppCompatActivity {
             savedProducts.add(JsonUtil.getJson(orderItem));
 
             SharedPreferences.Editor edit = sharedPreferences.edit();
-            edit.remove(storeID);
-            edit.putStringSet(storeID, savedProducts);
+            edit.remove(String.valueOf(storeID));
+            edit.putStringSet(String.valueOf(storeID), savedProducts);
             edit.apply();
             setTotal();
         });
@@ -305,7 +240,7 @@ public class ProductActivity extends AppCompatActivity {
 
     private void setTotal() {
 
-        Set<String> saveProducts = sharedPreferences.getStringSet(storeID, null);
+        Set<String> saveProducts = sharedPreferences.getStringSet(String.valueOf(storeID), null);
 
         int totalPrice = 0;
         if (saveProducts != null) {
@@ -323,4 +258,66 @@ public class ProductActivity extends AppCompatActivity {
         super.onResume();
         setTotal();
     }
+
+    private void setRequireItem(LinearLayout extraView, TextView total, List<ProductExtra> extras) {
+        if (extras.size() > 0) {
+            LinearLayout parent = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.radio_required, extraView, false);
+            RadioGroup items = parent.findViewById(R.id.require_item);
+            LinearLayout values = parent.findViewById(R.id.require_value);
+            extraView.addView(parent);
+
+            boolean isFirst = true;
+            for (ProductExtra extra : extras) {
+                RadioButton item = (RadioButton) LayoutInflater.from(this).inflate(R.layout.radio_item, items, false);
+                item.setText(extra.getName());
+                items.addView(item);
+
+                TextView value = (TextView) LayoutInflater.from(this).inflate(R.layout.textview_value, items, false);
+                value.setText(extra.getValue() + " VND");
+                values.addView(value);
+
+
+                item.setOnClickListener(v -> {
+                    orderItem.getExtras().removeIf(ProductExtra::isRequired);
+                    orderItem.getExtras().add(extra);
+                    total.setText(orderItem.getTotalPrice() + " VND");
+                });
+
+                if (isFirst) {
+                    item.performClick();
+                    isFirst = false;
+                }
+
+            }
+        }
+    }
+
+    private void setOptionalItem(LinearLayout extraView, TextView total, List<ProductExtra> extras) {
+        if (extras.size() > 0) {
+            LinearLayout parent = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.checkbox_extra, extraView, false);
+            LinearLayout items = parent.findViewById(R.id.option_item);
+            LinearLayout values = parent.findViewById(R.id.option_value);
+            extraView.addView(parent);
+
+            for (ProductExtra extra : extras) {
+                CheckBox item = (CheckBox) LayoutInflater.from(this).inflate(R.layout.checkbox_item, items, false);
+                item.setText(extra.getName());
+                items.addView(item);
+
+                TextView value = (TextView) LayoutInflater.from(this).inflate(R.layout.textview_value, items, false);
+                value.setText(extra.getValue() + " VND");
+                values.addView(value);
+
+                item.setOnClickListener(v -> {
+                    if (item.isChecked()) {
+                        orderItem.getExtras().add(extra);
+                    } else {
+                        orderItem.getExtras().remove(extra);
+                    }
+                    total.setText(orderItem.getTotalPrice() + " VND");
+                });
+            }
+        }
+    }
 }
+

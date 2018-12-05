@@ -8,10 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.longnh.mobile.mininow.adapter.StoreRecycleAdapter;
-import com.longnh.mobile.mininow.entity.Store;
-import com.longnh.mobile.mininow.model.StoreService;
+import com.longnh.mobile.mininow.model.Store;
+import com.longnh.mobile.mininow.service.StoreService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -30,7 +29,6 @@ public class MainStoreFragment extends Fragment {
     private RecyclerView listStores;
     private ProgressBar spinner;
     private List<Store> stores;
-    private List<Store> all;
     private SearchView searchStore;
 
     public MainStoreFragment() {
@@ -53,8 +51,6 @@ public class MainStoreFragment extends Fragment {
         searchStore = getActivity().findViewById(R.id.search_store);
 
         spinner.setVisibility(View.GONE);
-
-        getStores();
 
         searchStore.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -83,23 +79,15 @@ public class MainStoreFragment extends Fragment {
         spinner.setVisibility(View.GONE);
     }
 
-    private void getStores() {
-        StoreService.getAll(getContext(), data -> {
-            all = (List<Store>) data;
-        });
-    }
-
     private void findStore(String name) {
         spinner.setVisibility(View.VISIBLE);
-        stores = new ArrayList<>();
-        for (Store s : all) {
-            if (containsIgnoreCase(s.getName(), name)) {
-                stores.add(s);
-            }
-        }
+        StoreService.findStore(getContext(), name, data -> {
+            stores = (List<Store>) data;
+        });
         adapter = new StoreRecycleAdapter(getActivity(), stores);
         setStoreList();
     }
+
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {

@@ -6,10 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.longnh.mobile.mininow.adapter.OrderHistoryRecycleAdapter;
-import com.longnh.mobile.mininow.adapter.OrderRecycleAdapter;
-import com.longnh.mobile.mininow.entity.Order;
-import com.longnh.mobile.mininow.model.OrderService;
-import com.longnh.mobile.mininow.ultils.ConstantManager;
+import com.longnh.mobile.mininow.model.Customer;
+import com.longnh.mobile.mininow.model.Order;
+import com.longnh.mobile.mininow.service.OrderService;
+import com.longnh.mobile.mininow.ultils.UserSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +27,7 @@ public class OrderHistoryFragment extends Fragment {
     private List<Order> orders;
     private RecyclerView rvItems;
     private OrderHistoryRecycleAdapter adapter;
+    private Customer current;
 
     public OrderHistoryFragment() {
     }
@@ -42,13 +43,15 @@ public class OrderHistoryFragment extends Fragment {
     public void onStart() {
         super.onStart();
         rvItems = getActivity().findViewById(R.id.rvOrderHistory);
+        UserSession session = new UserSession(getContext(), UserSession.UserSessionType.CUSTOMER);
+        current = session.getCustomerDetails();
         getFinishedOrder();
     }
 
     private void getFinishedOrder() {
 
         orders = new ArrayList<>();
-        OrderService.getFinishedOrder(getContext(), ConstantManager.customerID, data -> {
+        OrderService.getFinishedOrder(getContext(), current.getId(), data -> {
 
             orders = (List<Order>)data;
             adapter = new OrderHistoryRecycleAdapter(getActivity(), orders);

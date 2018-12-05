@@ -1,21 +1,18 @@
-package com.longnh.mobile.mininow.model;
+package com.longnh.mobile.mininow.service;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.longnh.mobile.mininow.entity.Store;
+import com.longnh.mobile.mininow.model.Product;
+import com.longnh.mobile.mininow.model.Store;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.JsonUtil;
 
@@ -25,12 +22,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 public class StoreService {
 
     static final String TAG = "StoreService";
     static final ObjectMapper om = new ObjectMapper();
+    static final String STORE_URL_API = ConstantManager.HOST + "/store/";
 
     static {
         om.registerModule(new ParameterNamesModule())
@@ -38,9 +35,53 @@ public class StoreService {
                 .registerModule(new JavaTimeModule());
     }
 
+    public static void getProductOfStore(Context context, long storeID, final FirestoreCallback callback) {
+
+        final String URL = STORE_URL_API + storeID + "/product/";
+        RequestQueue requestQueue = VolleyManager.getInstance(context).getRequestQueue();
+
+        StringRequest objectRequest = new StringRequest(
+                Request.Method.GET,
+                URL,
+                response -> {
+                    try {
+                        List<Product> products = Arrays.asList(om.readValue(response, Product[].class));
+                        callback.onSuccess(products);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        Log.e(TAG, "onResponse: " + ex.getMessage());
+                    }
+                },
+                error -> Log.e(TAG, "onErrorResponse: " + error.toString())
+        );
+        requestQueue.add(objectRequest);
+    }
+
+    public static void findStore(Context context, String name, final VolleyCallback callback) {
+
+        final String URL = STORE_URL_API + "find/" + name;
+        RequestQueue requestQueue = VolleyManager.getInstance(context).getRequestQueue();
+
+        StringRequest objectRequest = new StringRequest(
+                Request.Method.GET,
+                URL,
+                response -> {
+                    try {
+                        List<Store> stores = Arrays.asList(om.readValue(response, Store[].class));
+                        callback.onSuccess(stores);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        Log.e(TAG, "onResponse: " + ex.getMessage());
+                    }
+                },
+                error -> Log.e(TAG, "onErrorResponse: " + error.toString())
+        );
+        requestQueue.add(objectRequest);
+    }
+
     public static void getNewStore(Context context, final VolleyCallback callback) {
 
-        final String URL = ConstantManager.HOST + "/store/new/";
+        final String URL = STORE_URL_API + "new/";
         RequestQueue requestQueue = VolleyManager.getInstance(context).getRequestQueue();
 
         StringRequest objectRequest = new StringRequest(
@@ -62,7 +103,7 @@ public class StoreService {
 
     public static void getAll(Context context, final VolleyCallback callback) {
 
-        final String URL = ConstantManager.HOST + "/store/";
+        final String URL = STORE_URL_API;
         RequestQueue requestQueue = VolleyManager.getInstance(context).getRequestQueue();
 
         StringRequest objectRequest = new StringRequest(
@@ -82,9 +123,9 @@ public class StoreService {
         requestQueue.add(objectRequest);
     }
 
-    public static void getStoreInfo(Context context, String storeID, final FirestoreCallback callback) {
+    public static void getStoreInfo(Context context, long storeID, final FirestoreCallback callback) {
 
-        final String URL = ConstantManager.HOST + "/store/" + storeID;
+        final String URL = STORE_URL_API + storeID;
         RequestQueue requestQueue = VolleyManager.getInstance(context).getRequestQueue();
 
         StringRequest objectRequest = new StringRequest(

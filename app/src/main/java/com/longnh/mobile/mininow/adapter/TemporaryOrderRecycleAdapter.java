@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.longnh.mobile.mininow.ProductActivity;
 import com.longnh.mobile.mininow.R;
-import com.longnh.mobile.mininow.entity.OrderItem;
-import com.longnh.mobile.mininow.entity.Store;
+import com.longnh.mobile.mininow.model.OrderItem;
+import com.longnh.mobile.mininow.model.Store;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.JsonUtil;
 
@@ -46,7 +46,7 @@ public class TemporaryOrderRecycleAdapter extends RecyclerView.Adapter<Temporary
         holder.address.setText(store.getAddress());
 
         SharedPreferences sharedPreferences = activity.getApplication().getApplicationContext().getSharedPreferences(ConstantManager.ORDER_TEMPORARY, Context.MODE_PRIVATE);
-        Set<String> saved = sharedPreferences.getStringSet(store.getId(), new HashSet<>());
+        Set<String> saved = sharedPreferences.getStringSet(store.getId() + "", new HashSet<>());
         int quantity = 0;
         for (String s : saved) {
             OrderItem item = JsonUtil.getObject(s, OrderItem.class);

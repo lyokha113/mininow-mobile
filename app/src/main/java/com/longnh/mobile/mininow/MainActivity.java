@@ -11,9 +11,6 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.longnh.mobile.mininow.adapter.ViewPagerAdapter;
-import com.longnh.mobile.mininow.entity.Customer;
-import com.longnh.mobile.mininow.model.CustomerService;
-import com.longnh.mobile.mininow.ultils.ConstantManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        setCurrentCustomer();
 
         addControls();
         addEvents();
@@ -124,12 +119,6 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFrag(accountFragment, "account");
 
         viewPager.setAdapter(adapter);
-    }
-
-    private void setCurrentCustomer() {
-        CustomerService.getCustomerInfo(getApplicationContext(), ConstantManager.customerID, data -> {
-            ConstantManager.customer = (Customer) data;
-        });
     }
 
 }

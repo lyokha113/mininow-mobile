@@ -13,10 +13,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.longnh.mobile.mininow.entity.Customer;
-import com.longnh.mobile.mininow.model.CustomerService;
-import com.longnh.mobile.mininow.model.VolleyCallback;
-import com.longnh.mobile.mininow.ultils.ConstantManager;
+import com.longnh.mobile.mininow.model.Customer;
+import com.longnh.mobile.mininow.service.CustomerService;
+import com.longnh.mobile.mininow.ultils.UserSession;
 
 import org.json.JSONException;
 
@@ -24,23 +23,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ChangeInformationActivity extends AppCompatActivity {
+
     Uri selectedUriImage;
     private EditText fullName, address, phone;
+    private Customer current;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_information);
+        UserSession session = new UserSession(getApplicationContext(), UserSession.UserSessionType.CUSTOMER);
+        current = session.getCustomerDetails();
         innitView();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(0, 0);
-    }
-
-    public void changeAvat(View view) {
+    public void changeImage(View view) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(intent, 200);
@@ -52,14 +49,9 @@ public class ChangeInformationActivity extends AppCompatActivity {
             ImageView avat = findViewById(R.id.avatar);
 
             FirebaseStorage storageRef = FirebaseStorage.getInstance();
-            StorageReference ref = storageRef.getReference().child("CU-" + ConstantManager.customer.getId() + selectedUriImage.getPathSegments());
+            StorageReference ref = storageRef.getReference().child("CU-" + current.getId() + selectedUriImage.getPathSegments());
             UploadTask uploadTask = ref.putFile(selectedUriImage);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(ChangeInformationActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            uploadTask.addOnFailureListener(exception -> Toast.makeText(ChangeInformationActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show()).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     avat.setImageURI(selectedUriImage);
@@ -73,9 +65,9 @@ public class ChangeInformationActivity extends AppCompatActivity {
         address = findViewById(R.id.address);
         phone = findViewById(R.id.phone);
 
-        fullName.setText(ConstantManager.customer.getName());
-        address.setText(ConstantManager.customer.getAddress());
-        phone.setText(ConstantManager.customer.getPhone());
+        fullName.setText(current.getName());
+        address.setText(current.getAddress());
+        phone.setText(current.getPhone());
     }
 
     private boolean checkConfirm() {
@@ -91,14 +83,14 @@ public class ChangeInformationActivity extends AppCompatActivity {
     public void clickToUpdate(View view) throws JSONException {
         if (checkConfirm()) {
             Customer customer = new Customer();
-            customer.setId(ConstantManager.customer.getId());
+            customer.setId(current.getId());
             customer.setName(fullName.getText().toString());
             customer.setAddress(address.getText().toString());
             customer.setPhone(phone.getText().toString());
             customer.setImgURL("");
             CustomerService.updateCustomer(getApplicationContext(), customer, data -> {
                 Customer customer1 = (Customer) data;
-                ConstantManager.customer = customer1;
+                current = customer1;
                 Toast.makeText(ChangeInformationActivity.this, "Cập nhật thành công !", Toast.LENGTH_SHORT).show();
 
             });

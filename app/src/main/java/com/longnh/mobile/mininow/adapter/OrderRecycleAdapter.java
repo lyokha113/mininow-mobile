@@ -1,26 +1,17 @@
 package com.longnh.mobile.mininow.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.longnh.mobile.mininow.ProductActivity;
 import com.longnh.mobile.mininow.R;
 import com.longnh.mobile.mininow.TrackingActivity;
-import com.longnh.mobile.mininow.entity.Order;
-import com.longnh.mobile.mininow.entity.OrderItem;
-import com.longnh.mobile.mininow.entity.Store;
-import com.longnh.mobile.mininow.ultils.ConstantManager;
-import com.longnh.mobile.mininow.ultils.JsonUtil;
+import com.longnh.mobile.mininow.model.Order;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

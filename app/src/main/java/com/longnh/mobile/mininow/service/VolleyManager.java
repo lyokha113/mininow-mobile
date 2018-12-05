@@ -1,4 +1,4 @@
-package com.longnh.mobile.mininow.model;
+package com.longnh.mobile.mininow.service;
 
 import android.content.Context;
 

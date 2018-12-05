@@ -10,7 +10,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.longnh.mobile.mininow.R;
-import com.longnh.mobile.mininow.entity.OrderItem;
+import com.longnh.mobile.mininow.model.OrderItem;
+import com.longnh.mobile.mininow.model.ProductExtra;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 import com.longnh.mobile.mininow.ultils.JsonUtil;
 
@@ -56,19 +57,10 @@ public class CartItemRecycleAdapter extends RecyclerView.Adapter<CartItemRecycle
         holder.quantity.setText(String.valueOf(orderItem.getQuantity()));
 
         String extra = "";
-        Map<String, Long> require = orderItem.getRequireExtra();
-        if (require != null) {
-            for (Map.Entry<String, Long> item : require.entrySet()) {
-                extra += item.getKey() + "\n";
-            }
+        for (ProductExtra productExtra : orderItem.getExtras()) {
+            extra += productExtra.getName() + "\n";
         }
 
-        Map<String, Long> optional = orderItem.getOptionalExtra();
-        if (optional != null) {
-            for (Map.Entry<String, Long> item : optional.entrySet()) {
-                extra += item.getKey() + "\n";
-            }
-        }
         holder.extra.setText(extra);
 
         holder.btnAdd.setOnClickListener(v -> {
@@ -78,9 +70,8 @@ public class CartItemRecycleAdapter extends RecyclerView.Adapter<CartItemRecycle
             List<String> toRemove = new ArrayList<>();
             savedProducts.forEach(ele -> {
                 OrderItem savedItem = JsonUtil.getObject(ele, OrderItem.class);
-                if (savedItem.getProductID().equals(orderItem.getProductID())
-                        && savedItem.getRequireExtra().equals(orderItem.getRequireExtra())
-                        && savedItem.getOptionalExtra().equals(orderItem.getOptionalExtra())) {
+                if (savedItem.getProductID() == orderItem.getProductID()
+                        && savedItem.getExtras().equals(orderItem.getExtras())) {
                     orderItem.setQuantity(savedItem.getQuantity() + 1);
                     holder.quantity.setText(String.valueOf(orderItem.getQuantity()));
                     toRemove.add(ele);
@@ -108,9 +99,8 @@ public class CartItemRecycleAdapter extends RecyclerView.Adapter<CartItemRecycle
                 List<String> toRemove = new ArrayList<>();
                 savedProducts.forEach(ele -> {
                     OrderItem savedItem = JsonUtil.getObject(ele, OrderItem.class);
-                    if (savedItem.getProductID().equals(orderItem.getProductID())
-                            && savedItem.getRequireExtra().equals(orderItem.getRequireExtra())
-                            && savedItem.getOptionalExtra().equals(orderItem.getOptionalExtra())) {
+                    if (savedItem.getProductID() == orderItem.getProductID()
+                            && savedItem.getExtras().equals(orderItem.getExtras())) {
                         orderItem.setQuantity(savedItem.getQuantity() - 1);
                         holder.quantity.setText(String.valueOf(orderItem.getQuantity()));
                         toRemove.add(ele);
@@ -136,9 +126,8 @@ public class CartItemRecycleAdapter extends RecyclerView.Adapter<CartItemRecycle
                     List<String> toRemove = new ArrayList<>();
                     savedProducts.forEach(ele -> {
                         OrderItem savedItem = JsonUtil.getObject(ele, OrderItem.class);
-                        if (savedItem.getProductID().equals(orderItem.getProductID())
-                                && savedItem.getRequireExtra().equals(orderItem.getRequireExtra())
-                                && savedItem.getOptionalExtra().equals(orderItem.getOptionalExtra())) {
+                        if (savedItem.getProductID() == orderItem.getProductID()
+                                && savedItem.getExtras().equals(orderItem.getExtras())) {
                             orderItem.setQuantity(savedItem.getQuantity() - 1);
                             holder.quantity.setText(String.valueOf(orderItem.getQuantity()));
                             toRemove.add(ele);

@@ -5,10 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.longnh.mobile.mininow.R;
-import com.longnh.mobile.mininow.entity.OrderItem;
+import com.longnh.mobile.mininow.model.OrderItem;
+import com.longnh.mobile.mininow.model.ProductExtra;
 
 import java.util.List;
 import java.util.Map;
@@ -39,18 +39,8 @@ public class OrderItemRecycleAdapter extends RecyclerView.Adapter<OrderItemRecyc
         holder.price.setText(String.valueOf(orderItem.getTotalPrice()) + " VND");
 
         String extra = "";
-        Map<String, Long> require = orderItem.getRequireExtra();
-        if (require != null) {
-            for (Map.Entry<String, Long> item : require.entrySet()) {
-                extra += item.getKey() + "\n";
-            }
-        }
-
-        Map<String, Long> optional = orderItem.getOptionalExtra();
-        if (optional != null) {
-            for (Map.Entry<String, Long> item : optional.entrySet()) {
-                extra += item.getKey() + "\n";
-            }
+        for (ProductExtra productExtra : orderItem.getExtras()) {
+            extra += productExtra.getName() + "\n";
         }
         holder.extra.setText(extra);
     }

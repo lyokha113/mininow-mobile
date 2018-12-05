@@ -1,22 +1,19 @@
 package com.longnh.mobile.mininow;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.longnh.mobile.mininow.adapter.OrderRecycleAdapter;
-import com.longnh.mobile.mininow.entity.Order;
-import com.longnh.mobile.mininow.model.OrderService;
-import com.longnh.mobile.mininow.ultils.ConstantManager;
+import com.longnh.mobile.mininow.model.Customer;
+import com.longnh.mobile.mininow.model.Order;
+import com.longnh.mobile.mininow.service.OrderService;
+import com.longnh.mobile.mininow.ultils.UserSession;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,6 +25,7 @@ public class OngoingFragment extends Fragment {
     private List<Order> orders;
     private RecyclerView listStore;
     private OrderRecycleAdapter adapter;
+    private Customer current;
 
     public OngoingFragment() {
         // Required empty public constructor
@@ -44,13 +42,15 @@ public class OngoingFragment extends Fragment {
     public void onStart() {
         super.onStart();
         listStore = getActivity().findViewById(R.id.list_ongoing_order);
+        UserSession session = new UserSession(getContext(), UserSession.UserSessionType.CUSTOMER);
+        current = session.getCustomerDetails();
         getAllTemporaryOrder();
     }
 
     private void getAllTemporaryOrder() {
 
         orders = new ArrayList<>();
-        OrderService.getOngoingOrder(getContext(), ConstantManager.customerID, data -> {
+        OrderService.getOngoingOrder(getContext(), current.getId(), data -> {
 
             orders = (List<Order>)data;
             adapter = new OrderRecycleAdapter(getActivity(), orders);

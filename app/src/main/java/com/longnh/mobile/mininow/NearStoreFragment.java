@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.longnh.mobile.mininow.adapter.StoreRecycleAdapter;
-import com.longnh.mobile.mininow.entity.Store;
-import com.longnh.mobile.mininow.model.StoreService;
+import com.longnh.mobile.mininow.model.Store;
+import com.longnh.mobile.mininow.service.StoreService;
+import com.longnh.mobile.mininow.service.VolleyCallback;
 import com.longnh.mobile.mininow.ultils.LocationUtils;
 
 import java.util.ArrayList;
@@ -78,7 +80,12 @@ public class NearStoreFragment extends Fragment {
         super.onResume();
 
         if (result == null) {
-            getStores(LocationUtils.getLastKnownLocation(getActivity(), locationListener));
+            LocationUtils utils = new LocationUtils(getActivity());
+            utils.getCurrentLocation(data -> {
+                Location location = (Location) data;
+                getStores(new LatLng(location.getLatitude(), location.getLongitude()));
+            });
+
         } else {
             setStoreList();
         }
@@ -97,7 +104,7 @@ public class NearStoreFragment extends Fragment {
         super.onPause();
     }
 
-    private void getStores(final Location location) {
+    private void getStores(final LatLng location) {
 
         if (location == null) {
             spinner.setVisibility(View.GONE);
@@ -107,7 +114,7 @@ public class NearStoreFragment extends Fragment {
         spinner.setVisibility(View.VISIBLE);
         StoreService.getAll(getContext(), data -> {
             final List<Store> stores = (List<Store>) data;
-            String origin = location.getLatitude() + "," + location.getLongitude();
+            String origin = location.latitude + "," + location.longitude;
             String destination = "";
             for (Store store : stores) {
                 destination += store.getLatitude() + "," + store.getLongitude() + "|";

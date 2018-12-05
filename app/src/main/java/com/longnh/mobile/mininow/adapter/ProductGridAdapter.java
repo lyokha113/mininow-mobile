@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.longnh.mobile.mininow.R;
-import com.longnh.mobile.mininow.entity.Product;
+import com.longnh.mobile.mininow.model.Product;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

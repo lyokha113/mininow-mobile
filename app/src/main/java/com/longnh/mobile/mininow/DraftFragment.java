@@ -6,15 +6,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.longnh.mobile.mininow.adapter.TemporaryOrderRecycleAdapter;
-import com.longnh.mobile.mininow.entity.Store;
-import com.longnh.mobile.mininow.model.StoreService;
+import com.longnh.mobile.mininow.model.Store;
+import com.longnh.mobile.mininow.service.StoreService;
 import com.longnh.mobile.mininow.ultils.ConstantManager;
 
 import java.util.ArrayList;
@@ -80,8 +77,6 @@ public class DraftFragment extends Fragment {
     private void getAllTemporaryOrder() {
         spinner.setVisibility(View.VISIBLE);
 
-
-
         Set<String> keys = sharedPreferences.getAll().keySet();
         stores = new ArrayList<>();
         StoreService.getAll(getContext(), data -> {
@@ -90,7 +85,7 @@ public class DraftFragment extends Fragment {
             for (String key : keys) {
                 for (int i = 0; i < rs.size(); i++) {
                     Store tmp = rs.get(i);
-                    if (tmp.getId().equals(key)) {
+                    if (String.valueOf(tmp.getId()).equals(key)) {
                         stores.add(tmp);
                         break;
                     }
